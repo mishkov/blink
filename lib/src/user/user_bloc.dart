@@ -44,13 +44,13 @@ class UserBloc extends Cubit<UserState> {
       });
     } catch (e) {
       log(e.toString());
-      emit(UserState.error(errorMessage: e.toString()));
+      emit(UserState.error(message: e.toString()));
     }
   }
 
   Future<void> initData() async {
     if (FirebaseAuth.instance.currentUser == null) {
-      emit(UserState.error(errorMessage: 'user is null'));
+      emit(UserState.error(message: 'user is null'));
       return;
     }
 
