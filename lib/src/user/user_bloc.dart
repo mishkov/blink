@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blink/src/user/user.dart' as firebase_user;
 
 class UserBloc extends Cubit<UserState> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
+  final GoogleSignIn _googleSignInConfiguration = GoogleSignIn(
     scopes: [
       'email',
       'profile',
@@ -18,7 +18,7 @@ class UserBloc extends Cubit<UserState> {
 
   Future<void> loginWithGoogle() async {
     try {
-      final googleAccount = await _googleSignIn.signIn();
+      final googleAccount = await _googleSignInConfiguration.signIn();
       if (googleAccount == null) {
         throw AuthException('signIn method returned null');
       }
@@ -77,7 +77,7 @@ class UserBloc extends Cubit<UserState> {
 
   Future<void> logout() async {
     FirebaseAuth.instance.signOut();
-    _googleSignIn.signOut();
+    _googleSignInConfiguration.signOut();
   }
 }
 
