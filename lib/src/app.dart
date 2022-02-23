@@ -79,8 +79,9 @@ class BlinkApp extends StatelessWidget {
             return MaterialPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
-                return BlocProvider.value(
-                  value: userCubit,
+                return BlocProvider(
+                  lazy: false,
+                  create: (_) => UserCubit(),
                   child: Builder(
                     builder: (_) {
                       switch (routeSettings.name) {
