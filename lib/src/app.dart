@@ -22,7 +22,7 @@ class BlinkApp extends StatelessWidget {
   }) : super(key: key);
 
   final SettingsController settingsController;
-  final UserCubit userCubit;
+  final UserBloc userCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class BlinkApp extends StatelessWidget {
               builder: (BuildContext context) {
                 return BlocProvider(
                   lazy: false,
-                  create: (_) => UserCubit(),
+                  create: (_) => UserBloc(),
                   child: Builder(
                     builder: (_) {
                       switch (routeSettings.name) {

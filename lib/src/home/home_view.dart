@@ -74,7 +74,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
       ),
-      drawer: BlocBuilder<UserCubit, UserState>(builder: (context, userState) {
+      drawer: BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
         final user = userState.user;
         return Drawer(
           child: SingleChildScrollView(
@@ -156,7 +156,7 @@ class _HomeViewState extends State<HomeView> {
                     )),
                 TextButton(
                   onPressed: () {
-                    context.read<UserCubit>().logout();
+                    context.read<UserBloc>().logout();
                     Navigator.restorablePushNamed(context, LoginView.routeName);
                   },
                   child: const Text(

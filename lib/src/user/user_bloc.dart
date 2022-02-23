@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blink/src/user/user.dart' as firebase_user;
 
-class UserCubit extends Cubit<UserState> {
+class UserBloc extends Cubit<UserState> {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
@@ -14,7 +14,7 @@ class UserCubit extends Cubit<UserState> {
     ],
   );
 
-  UserCubit() : super(UserState());
+  UserBloc() : super(UserState());
 
   Future<void> loginWithGoogle() async {
     try {

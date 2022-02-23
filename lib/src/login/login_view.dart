@@ -11,14 +11,14 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<UserCubit, UserState>(
+      body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           Navigator.restorablePushNamed(context, HomeView.routeName);
         },
         child: Center(
           child: ElevatedButton(
             onPressed: () {
-              context.read<UserCubit>().loginWithGoogle();
+              context.read<UserBloc>().loginWithGoogle();
             },
             child: const Text('Login with Google'),
           ),
