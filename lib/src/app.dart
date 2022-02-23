@@ -18,11 +18,9 @@ class BlinkApp extends StatelessWidget {
   const BlinkApp({
     Key? key,
     required this.settingsController,
-    required this.userCubit,
   }) : super(key: key);
 
   final SettingsController settingsController;
-  final UserBloc userCubit;
 
   @override
   Widget build(BuildContext context) {

@@ -25,6 +25,5 @@ void main() async {
 
   runApp(BlinkApp(
     settingsController: settingsController,
-    userCubit: userCubit,
   ));
 }
