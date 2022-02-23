@@ -13,7 +13,7 @@ class LoginView extends StatelessWidget {
     return Scaffold(
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
-          Navigator.restorablePushNamed(context, HomeView.routeName);
+          Navigator.popAndPushNamed(context, HomeView.routeName);
         },
         child: Center(
           child: ElevatedButton(
