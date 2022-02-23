@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "810238205032",
+    "firebase_url": "https://blink-c197f-default-rtdb.firebaseio.com",
+    "project_id": "blink-c197f",
+    "storage_bucket": "blink-c197f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810238205032:android:3a91bc18fc892bef396fdd",
+        "android_client_info": {
+          "package_name": "com.netler.blink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810238205032-261q0gvkderqk9lsom00i915ston1dmf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.netler.blink",
+            "certificate_hash": "287486f75013a1c2d9c7ffe359ff7d7da5b770aa"
+          }
+        },
+        {
+          "client_id": "810238205032-4j3gph1rrqd86hdh5p1omo69ifa9u1c5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.netler.blink",
+            "certificate_hash": "f704e6d57c3504b6225485ab60d2e90e53ec9274"
+          }
+        },
+        {
+          "client_id": "810238205032-opoc0l7qm8lc1kd13ghmpm54iaeg5mrj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.netler.blink",
+            "certificate_hash": "5e44340eaec0ee86b9e884b904d5100bfa581a92"
+          }
+        },
+        {
+          "client_id": "810238205032-1bga0hbkcjbqm56o59pujtan0rhckdv3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGd2qlShBEg6AFidmODq6FAXZVI5Fo6mk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810238205032-1bga0hbkcjbqm56o59pujtan0rhckdv3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

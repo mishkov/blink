@@ -1,0 +1,6 @@
+{
+  "appTitle": "blink прототип",
+  "@appTitle": {
+    "description": "Заголовок приложения"
+  }
+}
