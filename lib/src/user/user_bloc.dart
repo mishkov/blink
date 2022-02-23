@@ -86,7 +86,9 @@ class UserState {
 
   String errorMessage;
 
-  UserState({this.user, this.errorMessage = ""});
+  UserState({required this.user}) : errorMessage = '';
+
+  UserState.error({required this.errorMessage}) : user = null;
 }
 
 class AuthException implements Exception {
