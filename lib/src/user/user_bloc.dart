@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,13 +15,14 @@ class UserBloc extends Cubit<UserState> {
     ],
   );
 
-  UserBloc() : super(UserState(user: firebase_user.User()));
+  UserBloc() : super(NoUserState());
 
   Future<void> loginWithGoogle() async {
     try {
+      emit(UserInLogin(inProgress: true));
       final googleAccount = await _googleSignInConfiguration.signIn();
       if (googleAccount == null) {
-        emit(UserState.error(message: 'Sign in process was aborted'));
+        emit(ErrorUserState(message: 'Sign in process was aborted'));
         return;
       }
       final googleAuthentication = await googleAccount.authentication;
@@ -29,51 +31,43 @@ class UserBloc extends Cubit<UserState> {
         idToken: googleAuthentication.idToken,
       );
 
-      FirebaseAuth.instance
-          .signInWithCredential(credential)
-          .then((userCredential) {
-        if (userCredential.user != null) {
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(userCredential.user!.uid)
-              .set(
-                firebase_user.User.empty().getDataToFireStore(),
-                SetOptions(merge: true),
-              );
-        }
-        initData();
-      });
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        final userId = userCredential.user!.uid;
+        final usersCollection = FirebaseFirestore.instance.collection('users');
+        final userDoc = usersCollection.doc(userId);
+        final emptyUser = firebase_user.User.empty();
+        final emptyFirebaseUser = emptyUser.getDataToFireStore();
+
+        userDoc.set(emptyFirebaseUser, SetOptions(merge: true));
+      }
+      initUserFields();
     } catch (e) {
       log(e.toString());
-      emit(UserState.error(message: e.toString()));
+      emit(ErrorUserState(message: e.toString()));
+    } finally {
+      emit(UserInLogin(inProgress: true));
     }
   }
 
-  Future<void> initData() async {
-    if (FirebaseAuth.instance.currentUser == null) {
-      emit(UserState.error(message: 'user is null'));
+  Future<void> initUserFields() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      emit(ErrorUserState(message: 'No signed in user'));
       return;
     }
 
-    final user = FirebaseAuth.instance.currentUser!;
-    firebase_user.User firebaseUser;
-    final snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
-    firebaseUser = firebase_user.User.empty()
-      ..setDataFromFireStore(snapshot.data()!);
-    emit(UserState(
-      user: firebase_user.User(
-        name: user.displayName,
-        email: user.email,
-        photoUrl: user.photoURL,
-        balance: firebaseUser.balance,
-        highestTime: firebaseUser.highestTime,
-        won: firebaseUser.won,
-        lost: firebaseUser.lost,
-      ),
-    ));
+    final usersCollectino = FirebaseFirestore.instance.collection('users');
+    final userSnapshot = await usersCollectino.doc(user.uid).get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    firebaseUser.name = user.displayName;
+    firebaseUser.email = user.email;
+    firebaseUser.photoUrl = user.photoURL;
+
+    emit(ReadyUserState(user: firebaseUser));
   }
 
   Future<void> logout() async {
@@ -82,16 +76,30 @@ class UserBloc extends Cubit<UserState> {
   }
 }
 
-class UserState {
-  firebase_user.User? user;
+abstract class UserState {}
 
-  String errorMessage;
+class ReadyUserState extends UserState {
+  firebase_user.User user;
 
-  UserState({required this.user}) : errorMessage = '';
+  ReadyUserState({required this.user});
+}
 
-  UserState.error({required message})
-      : errorMessage = message,
-        user = null;
+class NoUserState extends UserState {
+  firebase_user.User user;
+
+  NoUserState() : user = firebase_user.User();
+}
+
+class ErrorUserState extends UserState {
+  final String message;
+
+  ErrorUserState({required this.message});
+}
+
+class UserInLogin extends UserState {
+  final bool inProgress;
+
+  UserInLogin({required this.inProgress});
 }
 
 class AuthException implements Exception {
