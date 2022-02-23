@@ -20,7 +20,8 @@ class UserBloc extends Cubit<UserState> {
     try {
       final googleAccount = await _googleSignInConfiguration.signIn();
       if (googleAccount == null) {
-        throw AuthException('Sign in process was aborted');
+        emit(UserState.error(message: 'Sign in process was aborted'));
+        return;
       }
       final googleAuthentication = await googleAccount.authentication;
       AuthCredential credential = GoogleAuthProvider.credential(
