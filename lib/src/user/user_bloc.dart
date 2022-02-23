@@ -14,7 +14,7 @@ class UserBloc extends Cubit<UserState> {
     ],
   );
 
-  UserBloc() : super(UserState());
+  UserBloc() : super(UserState(user: firebase_user.User()));
 
   Future<void> loginWithGoogle() async {
     try {
@@ -44,13 +44,13 @@ class UserBloc extends Cubit<UserState> {
       });
     } catch (e) {
       log(e.toString());
-      emit(UserState(errorMessage: e.toString()));
+      emit(UserState.error(errorMessage: e.toString()));
     }
   }
 
   Future<void> initData() async {
     if (FirebaseAuth.instance.currentUser == null) {
-      emit(UserState(errorMessage: 'user is null'));
+      emit(UserState.error(errorMessage: 'user is null'));
       return;
     }
 
@@ -88,7 +88,9 @@ class UserState {
 
   UserState({required this.user}) : errorMessage = '';
 
-  UserState.error({required this.errorMessage}) : user = null;
+  UserState.error({required message})
+      : errorMessage = message,
+        user = null;
 }
 
 class AuthException implements Exception {
