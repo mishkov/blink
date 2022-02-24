@@ -26,6 +26,7 @@ class LoginView extends StatelessWidget {
                   showErrorMessage(context, state.errorMessage);
                 } else if (state.isSuccess) {
                   Navigator.popAndPushNamed(context, HomeView.routeName);
+                  context.read<LoginModelView>().close();
                 }
               },
               child: Center(
