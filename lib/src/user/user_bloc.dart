@@ -47,7 +47,7 @@ class UserBloc extends Cubit<UserState> {
       log(e.toString());
       emit(ErrorUserState(message: e.toString()));
     } finally {
-      emit(UserInLogin(inProgress: true));
+      emit(UserInLogin(inProgress: false));
     }
   }
 
