@@ -2,5 +2,8 @@
   "appTitle": "blink_prototype",
   "@appTitle": {
     "description": "The title of the application"
-  }
+  },
+  "errorDialogTitle": "Error",
+  "tryAgain": "Try again",
+  "OkButton": "OK"
 }
