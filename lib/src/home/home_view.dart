@@ -75,6 +75,7 @@ class _HomeViewState extends State<HomeView> {
         title: Text(AppLocalizations.of(context)!.appTitle),
       ),
       drawer: BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
+        if (userState is! ReadyUserState) return const Text('Error');
         final user = userState.user;
         return Drawer(
           child: SingleChildScrollView(
