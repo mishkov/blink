@@ -2,6 +2,7 @@ import 'package:blink/src/user/user_bloc.dart';
 import 'package:blink/src/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'login_bloc.dart';
 
@@ -13,108 +14,83 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        return Center(
+      body: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state.inProgress) {
+            showProgressIndicator(context);
+          } else if (state.errorHappened) {
+            showErrorMessage(context, state.errorMessage);
+          }
+        },
+        child: Center(
           child: ElevatedButton(
             onPressed: () {
               context.read<UserBloc>().loginWithGoogle();
             },
             child: const Text('Login with Google'),
           ),
-        );
-      }
-          // listener: (context, state) {
-          //   if (state is UserInLogin && state.inProgress) {
-          //     showDialog<void>(
-          //       context: context,
-          //       barrierDismissible: false,
-          //       builder: (BuildContext context) {
-          //         return AlertDialog(
-          //           title: const Text('Login'),
-          //           content: Center(
-          //             child: Column(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: const [
-          //                 CircularProgressIndicator(),
-          //                 Text('Please wait for login...'),
-          //               ],
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   } else if (state is ErrorUserState) {
-          //     showDialog<void>(
-          //       context: context,
-          //       barrierDismissible: true,
-          //       builder: (BuildContext context) {
-          //         return AlertDialog(
-          //           title: const Text('Error'),
-          //           content: Center(
-          //             child: Column(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: [
-          //                 const Icon(
-          //                   Icons.error_outline,
-          //                   color: Colors.red,
-          //                 ),
-          //                 Text(state.message),
-          //               ],
-          //             ),
-          //           ),
-          //           actions: [
-          //             TextButton(
-          //               child: const Text('Try again'),
-          //               onPressed: () {
-          //                 Navigator.of(context).pop();
-          //                 context.read<UserBloc>().loginWithGoogle();
-          //               },
-          //             ),
-          //             TextButton(
-          //               child: const Text('OK'),
-          //               onPressed: () {
-          //                 Navigator.of(context).pop();
-          //               },
-          //             ),
-          //           ],
-          //         );
-          //       },
-          //     );
-          //   } else if (state is ReadyUserState) {
-          //     Navigator.popAndPushNamed(context, HomeView.routeName);
-          //   } else {
-          //     showDialog<void>(
-          //       context: context,
-          //       barrierDismissible: false,
-          //       builder: (BuildContext context) {
-          //         return AlertDialog(
-          //           title: const Text('Error'),
-          //           content: Center(
-          //             child: Column(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: const [
-          //                 Icon(
-          //                   Icons.error_outline,
-          //                   color: Colors.red,
-          //                 ),
-          //                 Text('Unkkown error happend'),
-          //               ],
-          //             ),
-          //           ),
-          //           actions: [
-          //             TextButton(
-          //               child: const Text('OK'),
-          //               onPressed: () {
-          //                 Navigator.of(context).pop();
-          //               },
-          //             ),
-          //           ],
-          //         );
-          //       },
-          //     );
-          //   }
-          // },
+        ),
+      ),
+    );
+  }
+
+  Future<void> showProgressIndicator(BuildContext context) async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.loginDialogTitle),
+          content: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                Text(AppLocalizations.of(context)!.loginDialogMessage),
+              ],
+            ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> showErrorMessage(BuildContext context, String message) async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.errorDialogTitle),
+          content: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                ),
+                Text(message),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.tryAgain),
+              onPressed: () {
+                // TODO: check behavior. Maybe you have to add navigator.pop here
+                context.read<LoginBloc>().login();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.okButton),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
