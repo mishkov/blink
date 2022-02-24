@@ -14,7 +14,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<LoginBloc, LoginState>(
+      body: BlocListener<LoginModelView, LoginState>(
         listener: (context, state) {
           if (state.inProgress) {
             showProgressIndicator(context);
@@ -79,7 +79,7 @@ class LoginView extends StatelessWidget {
               child: Text(AppLocalizations.of(context)!.tryAgain),
               onPressed: () {
                 // TODO: check behavior. Maybe you have to add navigator.pop here
-                context.read<LoginBloc>().login();
+                context.read<LoginModelView>().login();
               },
             ),
             TextButton(
