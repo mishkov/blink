@@ -14,21 +14,30 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<LoginModelView, LoginState>(
-        listener: (context, state) {
-          if (state.inProgress) {
-            showProgressIndicator(context);
-          } else if (state.errorHappened) {
-            showErrorMessage(context, state.errorMessage);
-          }
-        },
-        child: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              context.read<UserBloc>().loginWithGoogle();
-            },
-            child: const Text('Login with Google'),
-          ),
+      body: BlocProvider(
+        create: (context) => LoginModelView(userBloc: context.read<UserBloc>()),
+        child: Builder(
+          builder: (context) {
+            return BlocListener<LoginModelView, LoginState>(
+              listener: (context, state) {
+                if (state.inProgress) {
+                  showProgressIndicator(context);
+                } else if (state.errorHappened) {
+                  showErrorMessage(context, state.errorMessage);
+                } else if (state.isSuccess) {
+                  Navigator.popAndPushNamed(context, HomeView.routeName);
+                }
+              },
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<UserBloc>().loginWithGoogle();
+                  },
+                  child: const Text('Login with Google'),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
