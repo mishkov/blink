@@ -5,5 +5,7 @@
   },
   "errorDialogTitle": "Error",
   "tryAgain": "Try again",
-  "okButton": "OK"
+  "okButton": "OK",
+  "loginDialogTitle": "Login",
+  "loginDialogMessage": "Please wait for login..."
 }
