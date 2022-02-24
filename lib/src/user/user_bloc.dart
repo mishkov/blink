@@ -70,8 +70,8 @@ class UserBloc extends Cubit<UserState> {
   }
 
   Future<void> logout() async {
-    FirebaseAuth.instance.signOut();
-    _googleSignInConfiguration.signOut();
+    await FirebaseAuth.instance.signOut();
+    await _googleSignInConfiguration.signOut();
   }
 }
 
