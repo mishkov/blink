@@ -12,8 +12,8 @@ class LoginModelView extends Cubit<LoginState> {
       await UserService().loginWithGoogle();
 
       emit(LoginState.success());
-    } on SignInAbortedException catch (e) {
-      emit(LoginState.error(errorMessage: e.message));
+    } on SignInAbortedException {
+      emit(LoginState.initial());
     } on NoSignedInUserExceptino catch (e) {
       emit(LoginState.error(errorMessage: e.message));
     } catch (e) {
