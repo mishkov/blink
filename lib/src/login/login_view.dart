@@ -36,7 +36,8 @@ class LoginView extends StatelessWidget {
                         onPressed: () {
                           context.read<LoginModelView>().login();
                         },
-                        child: const Text('Login with Google'),
+                        child: Text(AppLocalizations.of(context)!
+                            .loginWithGoogleButton),
                       ),
                     ),
                     Positioned(
