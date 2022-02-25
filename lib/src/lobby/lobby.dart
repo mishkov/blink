@@ -8,6 +8,8 @@ import '../home/home_model_view.dart';
 import '../home/signaling.dart';
 
 class Lobby extends StatefulWidget {
+  static const routeName = '/lobby';
+
   const Lobby({
     Key? key,
     required this.homeModelView,
