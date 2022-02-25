@@ -90,6 +90,9 @@ class DrawerContent extends StatelessWidget {
         ),
         const Divider(),
         TextButton(
+          style: TextButton.styleFrom(
+            alignment: Alignment.centerLeft,
+          ),
           onPressed: () {
             Navigator.pushNamed(context, SettingsView.routeName);
           },
@@ -99,6 +102,9 @@ class DrawerContent extends StatelessWidget {
           ),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            alignment: Alignment.centerLeft,
+          ),
           onPressed: () {
             UserService().logout();
             Navigator.restorablePushNamed(context, LoginView.routeName);
