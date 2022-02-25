@@ -78,7 +78,6 @@ class LoginView extends StatelessWidget {
                                     child: Text(
                                         AppLocalizations.of(context)!.tryAgain),
                                     onPressed: () {
-                                      // TODO: check behavior. Maybe you have to add navigator.pop here
                                       context.read<LoginModelView>().login();
                                     },
                                   ),
