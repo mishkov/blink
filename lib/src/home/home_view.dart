@@ -173,7 +173,7 @@ class _HomeViewState extends State<HomeView> {
                         )),
                     TextButton(
                       onPressed: () {
-                        context.read<UserService>().logout();
+                        UserService().logout();
                         Navigator.restorablePushNamed(
                             context, LoginView.routeName);
                       },
