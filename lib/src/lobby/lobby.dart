@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import '../battle/battle_screen.dart';
 import '../home/home_model_view.dart';
-import '../home/home_view.dart';
 import '../home/signaling.dart';
 
 class Lobby extends StatefulWidget {
