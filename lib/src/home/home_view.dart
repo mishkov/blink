@@ -169,18 +169,12 @@ class PlayButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return Lobby(
-                homeModelView: cubit,
-                localVideo: localVideo,
-                eyesOpenStream: eyesOpenStream,
-              );
-            },
-          ),
-        );
+        final args = {
+          'homeModelView': cubit,
+          'localVideo': localVideo,
+          'eyesOpenStream': eyesOpenStream,
+        };
+        Navigator.pushNamed(context, Lobby.routeName, arguments: args);
       },
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
