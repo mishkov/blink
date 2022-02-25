@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeCubit extends Cubit<HomeState> {
+class HomeModelView extends Cubit<HomeState> {
   double _bidInDollars = 1;
 
-  HomeCubit() : super(HomeState());
+  HomeModelView() : super(HomeState());
 
   set bidInDollars(double bid) {
     if (bid < 0.0) {

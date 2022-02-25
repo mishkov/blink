@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:blink/src/drawer/app_drawer.dart';
-import 'package:blink/src/home/bloc.dart';
+import 'package:blink/src/home/home_model_view.dart';
 import 'package:blink/src/home/signaling.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -77,10 +77,10 @@ class _HomeViewState extends State<HomeView> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
-          create: (_) => HomeCubit(),
-          child: BlocBuilder<HomeCubit, HomeState>(
+          create: (_) => HomeModelView(),
+          child: BlocBuilder<HomeModelView, HomeState>(
             builder: (context, homeState) {
-              final cubit = context.read<HomeCubit>();
+              final cubit = context.read<HomeModelView>();
 
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -193,7 +193,7 @@ class BattleNavigation extends StatefulWidget {
     required this.eyesOpenStream,
   }) : super(key: key);
 
-  final HomeCubit cubit;
+  final HomeModelView cubit;
   final RTCVideoRenderer localVideo;
   final Stream<dynamic>? eyesOpenStream;
 
