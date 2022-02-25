@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:blink/src/drawer/app_drawer.dart';
 import 'package:blink/src/home/home_model_view.dart';
@@ -136,46 +137,67 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Lobby(
-                                homeModelView: cubit,
-                                localVideo: localVideo,
-                                eyesOpenStream: eyesOpenStream,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9.0),
-                          ),
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 32,
-                        ),
-                        child: Text(
-                          'Play',
-                          style: TextStyle(
-                            fontSize: 24,
-                          ),
-                        ),
-                      ),
+                    child: PlayButton(
+                      cubit: cubit,
+                      localVideo: localVideo,
+                      eyesOpenStream: eyesOpenStream!,
                     ),
                   ),
                 ],
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PlayButton extends StatelessWidget {
+  final HomeModelView cubit;
+  final RTCVideoRenderer localVideo;
+  final Stream eyesOpenStream;
+
+  const PlayButton(
+      {required this.cubit,
+      required this.localVideo,
+      required this.eyesOpenStream,
+      Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return Lobby(
+                homeModelView: cubit,
+                localVideo: localVideo,
+                eyesOpenStream: eyesOpenStream,
+              );
+            },
+          ),
+        );
+      },
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(9.0),
+          ),
+        ),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 16.0,
+          horizontal: 32,
+        ),
+        child: Text(
+          'Play',
+          style: TextStyle(
+            fontSize: 24,
           ),
         ),
       ),
