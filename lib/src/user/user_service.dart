@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +7,8 @@ import 'package:blink/src/user/user.dart' as firebase_user;
 
 class UserService {
   firebase_user.User? _user;
+  final StreamController<firebase_user.User> _userStreamController =
+      StreamController.broadcast();
 
   final GoogleSignIn _googleSignInConfiguration = GoogleSignIn(
     scopes: [
@@ -20,6 +24,8 @@ class UserService {
   UserService._internal();
 
   firebase_user.User? get user => _user;
+
+  Stream<firebase_user.User> get userStream => _userStreamController.stream;
 
   Future<void> loginWithGoogle() async {
     final googleAccount = await _googleSignInConfiguration.signIn();
@@ -63,6 +69,7 @@ class UserService {
     firebaseUser.photoUrl = user.photoURL;
 
     _user = firebaseUser;
+    _userStreamController.add(firebaseUser);
   }
 
   Future<void> logout() async {
