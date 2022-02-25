@@ -6,6 +6,7 @@
   "errorDialogTitle": "Error",
   "tryAgain": "Try again",
   "okButton": "OK",
+  "loginWithGoogleButton": "Login with Google",
   "loginDialogTitle": "Login",
   "loginDialogMessage": "Please wait for login..."
 }
