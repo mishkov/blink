@@ -4,9 +4,6 @@ import 'dart:developer';
 import 'package:blink/src/drawer/app_drawer.dart';
 import 'package:blink/src/home/bloc.dart';
 import 'package:blink/src/home/signaling.dart';
-import 'package:blink/src/settings/settings_view.dart';
-import 'package:blink/src/user/user_service.dart';
-import 'package:blink/src/login/login_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
