@@ -10,6 +10,7 @@
   "loginDialogTitle": "Login",
   "loginDialogMessage": "Please wait for login...",
   "noSignedInUserError": "No signed in user",
+  "invalidCredentialError": "The credential is malformed or has expired.",
   "unknownError": "Unknown error",
 
   "highestTimeTitle": "The Highest Time",
