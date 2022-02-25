@@ -1,4 +1,5 @@
 import 'package:blink/src/home/signaling.dart';
+import 'package:blink/src/lobby/lobby.dart';
 import 'package:blink/src/win/win_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -79,15 +80,23 @@ class BlinkApp extends StatelessWidget {
               builder: (BuildContext context) {
                 return Builder(
                   builder: (_) {
+                    final args =
+                        routeSettings.arguments as Map<String, dynamic>;
                     switch (routeSettings.name) {
                       case SettingsView.routeName:
                         return SettingsView(controller: settingsController);
                       case LoginView.routeName:
                         return const LoginView();
+                      case Lobby.routeName:
+                        return Lobby(
+                          homeModelView: args['homeModelView'],
+                          localVideo: args['localVideo'],
+                          eyesOpenStream: args['eyesOpenStream'],
+                        );
                       case LoseScreen.routeName:
+                        final signaling = args['signaling'];
                         return LoseScreen(
-                          signaling: (routeSettings.arguments
-                              as Map)['signaling'] as Signaling,
+                          signaling: signaling,
                         );
                       case WinScreen.routeName:
                         return WinScreen(
