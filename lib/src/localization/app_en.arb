@@ -18,5 +18,7 @@
   "numberOfEarned": "Won",
   "numberOfSpent": "Lost",
   "settingsTitle": "Settings",
-  "logoutButton": "Logout"
+  "logoutButton": "Logout",
+
+  "playButton": "Play"
 }
