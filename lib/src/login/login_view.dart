@@ -1,4 +1,4 @@
-import 'package:blink/src/user/user_bloc.dart';
+import 'package:blink/src/user/user_service.dart';
 import 'package:blink/src/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,7 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => LoginModelView(userBloc: context.read<UserBloc>()),
+        create: (context) => LoginModelView(),
         child: Builder(
           builder: (context) {
             return BlocListener<LoginModelView, LoginState>(
@@ -32,7 +32,7 @@ class LoginView extends StatelessWidget {
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    context.read<UserBloc>().loginWithGoogle();
+                    context.read<UserService>().loginWithGoogle();
                   },
                   child: const Text('Login with Google'),
                 ),
