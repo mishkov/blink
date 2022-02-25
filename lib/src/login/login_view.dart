@@ -54,8 +54,12 @@ class LoginView extends StatelessWidget {
           content: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
                 Text(AppLocalizations.of(context)!.loginDialogMessage),
               ],
             ),
