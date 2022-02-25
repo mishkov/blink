@@ -12,10 +12,11 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: BlocProvider(
         create: (context) => LoginModelView(
-          appLocalizations: AppLocalizations.of(context)!,
+          appLocalizations: appLocalizations,
         ),
         child: Builder(
           builder: (context) {
