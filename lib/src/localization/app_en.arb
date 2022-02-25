@@ -10,5 +10,12 @@
   "loginDialogTitle": "Login",
   "loginDialogMessage": "Please wait for login...",
   "noSignedInUserError": "No signed in user",
-  "unknownError": "Unknown error"
+  "unknownError": "Unknown error",
+
+  "highestTimeTitle": "The Highest Time",
+  "balanceTitle": "Balance",
+  "numberOfearned": "Won",
+  "numberOfSpend": "Lost",
+  "settingsTitle": "Settings",
+  "logoutButton": "Logout"
 }
