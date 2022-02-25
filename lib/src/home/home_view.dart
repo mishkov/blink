@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:blink/src/drawer/app_drawer.dart';
 import 'package:blink/src/home/bloc.dart';
 import 'package:blink/src/home/signaling.dart';
 import 'package:blink/src/settings/settings_view.dart';
@@ -70,122 +71,11 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = UserService().user;
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
       ),
-      drawer: user == null
-          ? TextButton(
-              onPressed: () async {
-                UserService().logout();
-                Navigator.popAndPushNamed(context, LoginView.routeName);
-              },
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.blue),
-              ),
-            )
-          : Drawer(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 80.0, left: 8),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: user != null
-                                ? user.photoUrl != null
-                                    ? NetworkImage(user.photoUrl!)
-                                    : null
-                                : null,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(user == null
-                                    ? 'no user'
-                                    : user.name ?? 'no name'),
-                                Text(user == null
-                                    ? 'no user'
-                                    : user.email ?? 'no email'),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text('The Highest Time'),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-                      child: Text(user == null
-                          ? 'no user'
-                          : user.highestTime.toString()),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text('Balance'),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-                      child: Text(
-                          user == null ? 'no user' : user.balance.toString()),
-                    ),
-                    const Divider(),
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text('Won'),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-                      child:
-                          Text(user == null ? 'no user' : user.won.toString()),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text('Lost'),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-                      child:
-                          Text(user == null ? 'no user' : user.won.toString()),
-                    ),
-                    const Divider(),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.restorablePushNamed(
-                              context, SettingsView.routeName);
-                        },
-                        child: const Text(
-                          'Settings',
-                          style: TextStyle(color: Colors.blue),
-                        )),
-                    TextButton(
-                      onPressed: () {
-                        UserService().logout();
-                        Navigator.restorablePushNamed(
-                            context, LoginView.routeName);
-                      },
-                      child: const Text(
-                        'Logout',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+      drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(
