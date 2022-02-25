@@ -3,7 +3,8 @@ import 'package:blink/src/user/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppDrawerViewModel extends Cubit<AppDrawerState> {
-  AppDrawerViewModel() : super(AppDrawerState(user: User())) {
+  AppDrawerViewModel()
+      : super(AppDrawerState(user: UserService().user ?? User())) {
     _registerListener();
   }
 
