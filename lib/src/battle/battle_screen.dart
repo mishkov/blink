@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-import '../home/home_view.dart';
 import '../home/signaling.dart';
+import '../lose/lose_screen.dart';
 import '../win/win_screen.dart';
 
 class BattleScreen extends StatefulWidget {

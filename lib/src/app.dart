@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:blink/src/home/home_view.dart';
 import 'package:blink/src/login/login_view.dart';
 
+import 'lose/lose_screen.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
