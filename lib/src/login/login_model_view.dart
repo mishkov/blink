@@ -1,9 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../user/user_service.dart';
 
 class LoginModelView extends Cubit<LoginState> {
-  LoginModelView() : super(LoginState.initial());
+  final AppLocalizations appLocalizations;
+  LoginModelView({required this.appLocalizations})
+      : super(LoginState.initial());
 
   Future<void> login() async {
     try {
@@ -15,9 +18,10 @@ class LoginModelView extends Cubit<LoginState> {
     } on SignInAbortedException {
       emit(LoginState.initial());
     } on NoSignedInUserExceptino catch (e) {
-      emit(LoginState.error(errorMessage: e.message));
+      emit(
+          LoginState.error(errorMessage: appLocalizations.noSignedInUserError));
     } catch (e) {
-      emit(LoginState.error(errorMessage: 'Unknown error'));
+      emit(LoginState.error(errorMessage: appLocalizations.unknownError));
     }
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'login_bloc.dart';
+import 'login_model_view.dart';
 
 class LoginView extends StatelessWidget {
   static const routeName = '/login';
@@ -14,7 +14,9 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => LoginModelView(),
+        create: (context) => LoginModelView(
+          appLocalizations: AppLocalizations.of(context)!,
+        ),
         child: Builder(
           builder: (context) {
             return BlocListener<LoginModelView, LoginState>(
