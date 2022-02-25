@@ -22,6 +22,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  // Need to rotate local image on android emulator
   bool isEmulator = false;
   RTCVideoRenderer localVideo = RTCVideoRenderer();
   Stream? eyesOpenStream;
