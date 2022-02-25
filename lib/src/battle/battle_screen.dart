@@ -7,6 +7,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../home/home_view.dart';
 import '../home/signaling.dart';
+import '../win/win_screen.dart';
 
 class BattleScreen extends StatefulWidget {
   const BattleScreen({

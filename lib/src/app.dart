@@ -1,4 +1,5 @@
 import 'package:blink/src/home/signaling.dart';
+import 'package:blink/src/win/win_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
