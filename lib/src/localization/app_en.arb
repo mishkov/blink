@@ -8,5 +8,7 @@
   "okButton": "OK",
   "loginWithGoogleButton": "Login with Google",
   "loginDialogTitle": "Login",
-  "loginDialogMessage": "Please wait for login..."
+  "loginDialogMessage": "Please wait for login...",
+  "noSignedInUserError": "No signed in user",
+  "unknownError": "Unknown error"
 }
