@@ -79,10 +79,14 @@ class LoginView extends StatelessWidget {
           content: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                  ),
                 ),
                 Text(message),
               ],
