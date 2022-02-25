@@ -32,7 +32,7 @@ class LoginView extends StatelessWidget {
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    context.read<UserService>().loginWithGoogle();
+                    context.read<LoginModelView>().login();
                   },
                   child: const Text('Login with Google'),
                 ),
