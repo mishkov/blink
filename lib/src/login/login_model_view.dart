@@ -17,9 +17,14 @@ class LoginModelView extends Cubit<LoginState> {
       emit(LoginState.success());
     } on SignInAbortedException {
       emit(LoginState.initial());
-    } on NoSignedInUserExceptino catch (e) {
+    } on NoSignedInUserExceptino {
       emit(
-          LoginState.error(errorMessage: appLocalizations.noSignedInUserError));
+        LoginState.error(errorMessage: appLocalizations.noSignedInUserError),
+      );
+    } on InvaliCredentialException {
+      emit(
+        LoginState.error(errorMessage: appLocalizations.invalidCredentialError),
+      );
     } catch (e) {
       emit(LoginState.error(errorMessage: appLocalizations.unknownError));
     }
