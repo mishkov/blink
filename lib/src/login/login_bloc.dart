@@ -3,15 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../user/user_service.dart';
 
 class LoginModelView extends Cubit<LoginState> {
-  final UserService userService;
-
-  LoginModelView({required this.userService}) : super(LoginState.initial());
+  LoginModelView() : super(LoginState.initial());
 
   Future<void> login() async {
     try {
       emit(LoginState.inProgress());
 
-      await userService.loginWithGoogle();
+      await UserService().loginWithGoogle();
 
       emit(LoginState.success());
     } on SignInAbortedException catch (e) {
