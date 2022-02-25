@@ -1,28 +1,26 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../user/user_bloc.dart';
+import '../user/user_service.dart';
 
 class LoginModelView extends Cubit<LoginState> {
-  final UserBloc userBloc;
+  final UserService userService;
 
-  LoginModelView({required this.userBloc}) : super(LoginState.initial());
+  LoginModelView({required this.userService}) : super(LoginState.initial());
 
   Future<void> login() async {
-    final subscription = userBloc.stream.listen((event) {
-      if (event is UserInLogin) {
-        final loggining = event;
-        if (loggining.inProgress) {
-          emit(LoginState.inProgress());
-        }
-      } else if (event is ErrorUserState) {
-        final error = event;
-        emit(LoginState.error(errorMessage: error.message));
-      } else if (event is ReadyUserState) {
-        emit(LoginState.success());
-      }
-    });
-    await userBloc.loginWithGoogle();
-    subscription.cancel();
+    try {
+      emit(LoginState.inProgress());
+
+      await userService.loginWithGoogle();
+
+      emit(LoginState.success());
+    } on SignInAbortedException catch (e) {
+      emit(LoginState.error(errorMessage: e.message));
+    } on NoSignedInUserExceptino catch (e) {
+      emit(LoginState.error(errorMessage: e.message));
+    } catch (e) {
+      emit(LoginState.error(errorMessage: 'Unknown error'));
+    }
   }
 }
 
