@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -28,6 +29,7 @@ class UserService {
   Stream<firebase_user.User> get userStream => _userStreamController.stream;
 
   Future<void> loginWithGoogle() async {
+    await _googleSignInConfiguration.signOut();
     final googleAccount = await _googleSignInConfiguration.signIn();
     if (googleAccount == null) {
       throw SignInAbortedException('Sign in process was aborted');
@@ -38,8 +40,17 @@ class UserService {
       idToken: googleAuthentication.idToken,
     );
 
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential;
+    try {
+      userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-credential') {
+        throw InvaliCredentialException(e.message!);
+      } else {
+        rethrow;
+      }
+    }
 
     if (userCredential.user != null) {
       final userId = userCredential.user!.uid;
@@ -93,5 +104,14 @@ class NoSignedInUserExceptino implements Exception {
   NoSignedInUserExceptino(this.message);
 
   @override
-  String toString() => 'SignInAbortedException: $message';
+  String toString() => 'NoSignedInUserException: $message';
+}
+
+class InvaliCredentialException implements Exception {
+  final String message;
+
+  InvaliCredentialException(this.message);
+
+  @override
+  String toString() => 'InvaliCredentialException: $message';
 }
