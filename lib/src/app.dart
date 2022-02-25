@@ -2,13 +2,11 @@ import 'package:blink/src/home/signaling.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:blink/src/home/home_view.dart';
 import 'package:blink/src/login/login_view.dart';
-import 'package:blink/src/user/user_bloc.dart';
 
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
@@ -77,36 +75,32 @@ class BlinkApp extends StatelessWidget {
             return MaterialPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
-                return BlocProvider(
-                  lazy: false,
-                  create: (_) => UserBloc(),
-                  child: Builder(
-                    builder: (_) {
-                      switch (routeSettings.name) {
-                        case SettingsView.routeName:
-                          return SettingsView(controller: settingsController);
-                        case LoginView.routeName:
+                return Builder(
+                  builder: (_) {
+                    switch (routeSettings.name) {
+                      case SettingsView.routeName:
+                        return SettingsView(controller: settingsController);
+                      case LoginView.routeName:
+                        return const LoginView();
+                      case LoseScreen.routeName:
+                        return LoseScreen(
+                          signaling: (routeSettings.arguments
+                              as Map)['signaling'] as Signaling,
+                        );
+                      case WinScreen.routeName:
+                        return WinScreen(
+                          signaling: (routeSettings.arguments
+                              as Map)['signaling'] as Signaling,
+                        );
+                      case HomeView.routeName:
+                      default:
+                        if (FirebaseAuth.instance.currentUser == null) {
                           return const LoginView();
-                        case LoseScreen.routeName:
-                          return LoseScreen(
-                            signaling: (routeSettings.arguments
-                                as Map)['signaling'] as Signaling,
-                          );
-                        case WinScreen.routeName:
-                          return WinScreen(
-                            signaling: (routeSettings.arguments
-                                as Map)['signaling'] as Signaling,
-                          );
-                        case HomeView.routeName:
-                        default:
-                          if (FirebaseAuth.instance.currentUser == null) {
-                            return const LoginView();
-                          } else {
-                            return const HomeView();
-                          }
-                      }
-                    },
-                  ),
+                        } else {
+                          return const HomeView();
+                        }
+                    }
+                  },
                 );
               },
             );
