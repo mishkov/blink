@@ -85,7 +85,7 @@ class BlinkApp extends StatelessWidget {
                   return Builder(
                     builder: (_) {
                       final args =
-                          routeSettings.arguments as Map<String, dynamic>;
+                          routeSettings.arguments as Map<String, dynamic>?;
                       switch (routeSettings.name) {
                         case SettingsView.routeName:
                           return SettingsView(controller: settingsController);
@@ -93,12 +93,12 @@ class BlinkApp extends StatelessWidget {
                           return const LoginView();
                         case Lobby.routeName:
                           return Lobby(
-                            homeModelView: args['homeModelView'],
+                            homeModelView: args!['homeModelView'],
                             localVideo: args['localVideo'],
                             eyesOpenStream: args['eyesOpenStream'],
                           );
                         case LoseScreen.routeName:
-                          final signaling = args['signaling'];
+                          final signaling = args!['signaling'];
                           return LoseScreen(
                             signaling: signaling,
                           );
