@@ -79,7 +79,7 @@ class _HomeViewState extends State<HomeView> {
           create: (_) => HomeModelView(),
           child: BlocBuilder<HomeModelView, HomeState>(
             builder: (context, homeState) {
-              final cubit = context.read<HomeModelView>();
+              final modelView = context.read<HomeModelView>();
 
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -90,10 +90,10 @@ class _HomeViewState extends State<HomeView> {
                       bottom: 8,
                     ),
                     child: TextFormField(
-                      initialValue: cubit.bidInDollars.toString(),
+                      initialValue: modelView.bidInDollars.toString(),
                       keyboardType: TextInputType.number,
                       onChanged: (newBid) {
-                        cubit.bidInDollars = int.tryParse(newBid);
+                        modelView.bidInDollars = int.tryParse(newBid);
                       },
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.bidInputTitle,
@@ -141,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: PlayButton(
-                      cubit: cubit,
+                      cubit: modelView,
                       localVideo: localVideo,
                       eyesOpenStream: eyesOpenStream!,
                     ),
