@@ -23,47 +23,15 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   // Need to rotate local image on android emulator
   bool isEmulator = false;
-  RTCVideoRenderer localVideo = RTCVideoRenderer();
-  Stream? eyesOpenStream;
 
   @override
   void initState() {
     super.initState();
 
-    localVideo.initialize().then((_) async {
-      await openUserMedia();
-      setState(() {});
-    }).then((_) async {
-      eyesOpenStream = await localVideo.srcObject
-          ?.getVideoTracks()
-          .first
-          .startEyesOpenStream();
-      setState(() {});
-    });
-
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     deviceInfo.androidInfo.then((deviceInfo) {
       return isEmulator = !deviceInfo.isPhysicalDevice!;
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<void> openUserMedia() async {
-    var stream = await navigator.mediaDevices.getUserMedia(
-      {
-        "audio": false,
-        "video": {
-          "width": 480,
-          "height": 360,
-        }
-      },
-    );
-
-    localVideo.srcObject = stream;
   }
 
   @override
@@ -90,7 +58,7 @@ class _HomeViewState extends State<HomeView> {
                       bottom: 8,
                     ),
                     child: TextFormField(
-                      initialValue: modelView.bidInDollars.toString(),
+                      initialValue: homeState.bidInDollars.toString(),
                       keyboardType: TextInputType.number,
                       onChanged: (newBid) {
                         modelView.bidInDollars = int.tryParse(newBid);
@@ -104,25 +72,40 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   Expanded(
-                    child: RotatedBox(
-                      quarterTurns: isEmulator ? 1 : 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: RTCVideoView(
-                          localVideo,
-                          mirror: true,
-                          objectFit:
-                              RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-                        ),
-                      ),
-                    ),
+                    child: homeState.localVideo != null
+                        ? RotatedBox(
+                            quarterTurns: isEmulator ? 1 : 0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: RTCVideoView(
+                                homeState.localVideo!,
+                                mirror: true,
+                                objectFit: RTCVideoViewObjectFit
+                                    .RTCVideoViewObjectFitCover,
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .cameraIsLoadingNotification,
+                                  ),
+                                ),
+                                const CircularProgressIndicator(),
+                              ],
+                            ),
+                          ),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Chip(
                       labelPadding: const EdgeInsets.symmetric(horizontal: 16),
                       label: StreamBuilder(
-                        stream: eyesOpenStream,
+                        stream: homeState.eyesOpenStream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final isEyesOpen = snapshot.data as bool;
@@ -142,8 +125,8 @@ class _HomeViewState extends State<HomeView> {
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: PlayButton(
                       cubit: modelView,
-                      localVideo: localVideo,
-                      eyesOpenStream: eyesOpenStream!,
+                      localVideo: homeState.localVideo,
+                      eyesOpenStream: homeState.eyesOpenStream,
                     ),
                   ),
                 ],
@@ -158,8 +141,8 @@ class _HomeViewState extends State<HomeView> {
 
 class PlayButton extends StatelessWidget {
   final HomeModelView cubit;
-  final RTCVideoRenderer localVideo;
-  final Stream eyesOpenStream;
+  final RTCVideoRenderer? localVideo;
+  final Stream? eyesOpenStream;
 
   const PlayButton(
       {required this.cubit,
@@ -171,14 +154,16 @@ class PlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        final args = {
-          'homeModelView': cubit,
-          'localVideo': localVideo,
-          'eyesOpenStream': eyesOpenStream,
-        };
-        Navigator.pushNamed(context, Lobby.routeName, arguments: args);
-      },
+      onPressed: localVideo != null && eyesOpenStream != null
+          ? () {
+              final args = {
+                'homeModelView': cubit,
+                'localVideo': localVideo,
+                'eyesOpenStream': eyesOpenStream,
+              };
+              Navigator.pushNamed(context, Lobby.routeName, arguments: args);
+            }
+          : null,
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
