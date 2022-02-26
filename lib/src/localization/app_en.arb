@@ -20,5 +20,9 @@
   "settingsTitle": "Settings",
   "logoutButton": "Logout",
 
-  "playButton": "Play"
+  "playButton": "Play",
+  "eyesIsOpenStatus": "Eyes is open",
+  "eyesIsClosedStatus": "Eyes is close",
+  "requestToPutFaceToCamera": "Please put your face to camera",
+  "bidInputTitle": "Bid (Not working now)"
 }
