@@ -80,23 +80,8 @@ class HomeView extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Chip(
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-                      label: StreamBuilder(
-                        stream: homeState.eyesOpenStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final isEyesOpen = snapshot.data as bool;
-                            return Text(isEyesOpen
-                                ? AppLocalizations.of(context)!.eyesIsOpenStatus
-                                : AppLocalizations.of(context)!
-                                    .eyesIsClosedStatus);
-                          } else {
-                            return Text(AppLocalizations.of(context)!
-                                .requestToPutFaceToCamera);
-                          }
-                        },
-                      ),
+                    child: EyesStatus(
+                      eyesOpenStream: homeState.eyesOpenStream,
                     ),
                   ),
                   Padding(
@@ -112,6 +97,34 @@ class HomeView extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class EyesStatus extends StatelessWidget {
+  final Stream<dynamic>? eyesOpenStream;
+  const EyesStatus({
+    required this.eyesOpenStream,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+      label: StreamBuilder(
+        stream: eyesOpenStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final isEyesOpen = snapshot.data as bool;
+            return Text(isEyesOpen
+                ? AppLocalizations.of(context)!.eyesIsOpenStatus
+                : AppLocalizations.of(context)!.eyesIsClosedStatus);
+          } else {
+            return Text(AppLocalizations.of(context)!.requestToPutFaceToCamera);
+          }
+        },
       ),
     );
   }
