@@ -11,16 +11,11 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../device_info/device_info_bloc.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   static const routeName = '/home';
 
   const HomeView({Key? key}) : super(key: key);
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
