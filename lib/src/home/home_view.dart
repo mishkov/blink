@@ -39,18 +39,11 @@ class HomeView extends StatelessWidget {
                       top: 20.0,
                       bottom: 8,
                     ),
-                    child: TextFormField(
-                      initialValue: homeState.bidInDollars.toString(),
-                      keyboardType: TextInputType.number,
+                    child: BitInput(
+                      bid: homeState.bidInDollars.toString(),
                       onChanged: (newBid) {
                         modelView.bidInDollars = int.tryParse(newBid);
                       },
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.bidInputTitle,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
                     ),
                   ),
                   Expanded(
@@ -118,6 +111,31 @@ class HomeView extends StatelessWidget {
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class BitInput extends StatelessWidget {
+  final String bid;
+  final void Function(String) onChanged;
+  const BitInput({
+    required this.bid,
+    required this.onChanged,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue: bid,
+      keyboardType: TextInputType.number,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context)!.bidInputTitle,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );
