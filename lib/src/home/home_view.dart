@@ -96,7 +96,7 @@ class _HomeViewState extends State<HomeView> {
                         cubit.bidInDollars = double.parse(newBid);
                       },
                       decoration: InputDecoration(
-                        labelText: 'Bid (Not working now)',
+                        labelText: AppLocalizations.of(context)!.bidInputTitle,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -126,10 +126,13 @@ class _HomeViewState extends State<HomeView> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final isEyesOpen = snapshot.data as bool;
-                            return Text(
-                                isEyesOpen ? 'Eyes is open' : 'Eyes is close');
+                            return Text(isEyesOpen
+                                ? AppLocalizations.of(context)!.eyesIsOpenStatus
+                                : AppLocalizations.of(context)!
+                                    .eyesIsClosedStatus);
                           } else {
-                            return const Text('Please put your face to camera');
+                            return Text(AppLocalizations.of(context)!
+                                .requestToPutFaceToCamera);
                           }
                         },
                       ),
