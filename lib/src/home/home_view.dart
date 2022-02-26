@@ -183,14 +183,14 @@ class PlayButton extends StatelessWidget {
           ),
         ),
       ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
           vertical: 16.0,
           horizontal: 32,
         ),
         child: Text(
-          'Play',
-          style: TextStyle(
+          AppLocalizations.of(context)!.playButton,
+          style: const TextStyle(
             fontSize: 24,
           ),
         ),
