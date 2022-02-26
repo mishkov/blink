@@ -136,18 +136,17 @@ class _LobbyState extends State<Lobby> {
 class LeaveQueueButton extends StatelessWidget {
   const LeaveQueueButton({
     Key? key,
-    required Signaling signaling,
-  })  : _signaling = signaling,
-        super(key: key);
+    required this.signaling,
+  }) : super(key: key);
 
-  final Signaling _signaling;
+  final Signaling signaling;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         // TODO: Move this code to LobbyModelView.close() method
-        _signaling.hangUp();
+        signaling.hangUp();
         Navigator.pop(context);
       },
       style: ButtonStyle(
