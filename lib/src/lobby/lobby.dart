@@ -124,7 +124,13 @@ class _LobbyState extends State<Lobby> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: LeaveQueueButton(signaling: _signaling),
+              child: LeaveQueueButton(
+                onPressed: () {
+                  // TODO: Move this code to LobbyModelView.close() method
+                  _signaling.hangUp();
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ],
         ),
@@ -134,21 +140,17 @@ class _LobbyState extends State<Lobby> {
 }
 
 class LeaveQueueButton extends StatelessWidget {
+  final void Function()? onPressed;
+
   const LeaveQueueButton({
     Key? key,
-    required this.signaling,
+    required this.onPressed,
   }) : super(key: key);
-
-  final Signaling signaling;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // TODO: Move this code to LobbyModelView.close() method
-        signaling.hangUp();
-        Navigator.pop(context);
-      },
+      onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.red),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
