@@ -93,7 +93,7 @@ class _HomeViewState extends State<HomeView> {
                       initialValue: cubit.bidInDollars.toString(),
                       keyboardType: TextInputType.number,
                       onChanged: (newBid) {
-                        cubit.bidInDollars = double.parse(newBid);
+                        cubit.bidInDollars = int.tryParse(newBid);
                       },
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.bidInputTitle,
