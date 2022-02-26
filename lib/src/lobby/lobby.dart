@@ -105,15 +105,9 @@ class _LobbyState extends State<Lobby> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: const Image(
-                          image: AssetImage(
-                              'assets/images/squid_game_waiting.jpg'),
-                        ),
-                      ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: WaitingPersonImage(),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 64.0),
@@ -159,6 +153,22 @@ class _LobbyState extends State<Lobby> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class WaitingPersonImage extends StatelessWidget {
+  const WaitingPersonImage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12.0),
+      child: const Image(
+        image: AssetImage('assets/images/squid_game_waiting.jpg'),
       ),
     );
   }
