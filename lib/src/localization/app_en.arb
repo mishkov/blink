@@ -25,5 +25,8 @@
   "eyesIsClosedStatus": "Eyes is close",
   "requestToPutFaceToCamera": "Please put your face to camera",
   "bidInputTitle": "Bid (Not working now)",
-  "cameraIsLoadingNotification": "Please wait for camera..."
+  "cameraIsLoadingNotification": "Please wait for camera...",
+
+  "requestToWaitForEnemy": "Please wait for another player...",
+  "leaveQueueButton": "Leave queue"
 }
