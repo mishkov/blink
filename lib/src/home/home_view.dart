@@ -48,21 +48,7 @@ class HomeView extends StatelessWidget {
                   ),
                   Expanded(
                     child: homeState.localVideo != null
-                        ? BlocBuilder<DeviceInfoBloc, DeviceInfo>(
-                            builder: (_, state) {
-                            return RotatedBox(
-                              quarterTurns: state.isEmulator ?? false ? 1 : 0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12.0),
-                                child: RTCVideoView(
-                                  homeState.localVideo!,
-                                  mirror: true,
-                                  objectFit: RTCVideoViewObjectFit
-                                      .RTCVideoViewObjectFitCover,
-                                ),
-                              ),
-                            );
-                          })
+                        ? Mirror(video: homeState.localVideo!)
                         : Center(
                             child: Column(
                               children: [
@@ -99,6 +85,32 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class Mirror extends StatelessWidget {
+  final RTCVideoRenderer video;
+
+  const Mirror({
+    required this.video,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DeviceInfoBloc, DeviceInfo>(builder: (_, state) {
+      return RotatedBox(
+        quarterTurns: state.isEmulator ?? false ? 1 : 0,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: RTCVideoView(
+            video,
+            mirror: true,
+            objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+          ),
+        ),
+      );
+    });
   }
 }
 
