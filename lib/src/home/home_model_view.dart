@@ -1,4 +1,5 @@
 import 'package:blink/src/local_camera/local_camera_service.dart';
+import 'package:blink/src/user/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -40,6 +41,8 @@ class HomeModelView extends Cubit<HomeState> {
       eyesOpenStream: _videoService.eyesOpenStream,
       localVideo: _videoService.video,
     ));
+
+    await UserService().initUserFields();
   }
 
   @override
