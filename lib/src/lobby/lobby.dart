@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../battle/battle_screen.dart';
 import '../home/home_model_view.dart';
@@ -114,11 +115,11 @@ class _LobbyState extends State<Lobby> {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 64.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 64.0),
                       child: Text(
-                        'Please wait for another player...',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.requestToWaitForEnemy,
+                        style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
@@ -142,14 +143,14 @@ class _LobbyState extends State<Lobby> {
                     ),
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
                     vertical: 14.0,
                     horizontal: 24,
                   ),
                   child: Text(
-                    'Leave queue',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.leaveQueueButton,
+                    style: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
