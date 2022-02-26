@@ -8,6 +8,7 @@ import '../battle/battle_screen.dart';
 import '../home/home_model_view.dart';
 import '../home/signaling.dart';
 
+// TODO: Make this widget stateless
 class Lobby extends StatefulWidget {
   static const routeName = '/lobby';
 
@@ -35,6 +36,7 @@ class _LobbyState extends State<Lobby> {
   void initState() {
     super.initState();
 
+    // TODO: Move all of this initializations to `LobbyModelView`
     _signaling.setLocalMediaStream(widget.localVideo);
 
     _remoteRenderer.initialize().then((_) {
@@ -53,6 +55,7 @@ class _LobbyState extends State<Lobby> {
 
   @override
   void dispose() {
+    // TODO: Move this code to `LobbyViewModel.close()` method
     if (_roomId.isNotEmpty) {
       _signaling.closeRoom(_roomId);
     }
@@ -60,6 +63,7 @@ class _LobbyState extends State<Lobby> {
     super.dispose();
   }
 
+  // TODO: Move this to `LobbyViewModel`
   Future<void> initRoom() async {
     if (await _signaling.isThereEmptyRoom()) {
       _roomId = await _signaling.getFirstFreeRoomId();
@@ -74,6 +78,7 @@ class _LobbyState extends State<Lobby> {
   }
 
   void goToBattleScreen(DateTime battleStartTime) {
+    // TODO: rewrite this to Navigator.popAndPushNamed()
     Navigator.pop(context);
     Navigator.push(
       context,
@@ -100,27 +105,8 @@ class _LobbyState extends State<Lobby> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.0),
-                      child: WaitingPersonImage(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 64.0),
-                      child: Text(
-                        AppLocalizations.of(context)!.requestToWaitForEnemy,
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            const Expanded(
+              child: PleaseWaitMessage(),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -134,6 +120,36 @@ class _LobbyState extends State<Lobby> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class PleaseWaitMessage extends StatelessWidget {
+  const PleaseWaitMessage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: WaitingPersonImage(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 64.0),
+            child: Text(
+              AppLocalizations.of(context)!.requestToWaitForEnemy,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
