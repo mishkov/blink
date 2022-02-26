@@ -24,5 +24,6 @@
   "eyesIsOpenStatus": "Eyes is open",
   "eyesIsClosedStatus": "Eyes is close",
   "requestToPutFaceToCamera": "Please put your face to camera",
-  "bidInputTitle": "Bid (Not working now)"
+  "bidInputTitle": "Bid (Not working now)",
+  "cameraIsLoadingNotification": "Please wait for camera..."
 }
