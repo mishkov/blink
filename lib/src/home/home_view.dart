@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:blink/src/drawer/app_drawer.dart';
 import 'package:blink/src/home/home_model_view.dart';
@@ -9,7 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+
+import '../device_info/device_info_bloc.dart';
 
 class HomeView extends StatefulWidget {
   static const routeName = '/home';
@@ -21,19 +21,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  // Need to rotate local image on android emulator
-  bool isEmulator = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    deviceInfo.androidInfo.then((deviceInfo) {
-      return isEmulator = !deviceInfo.isPhysicalDevice!;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,18 +60,21 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   Expanded(
                     child: homeState.localVideo != null
-                        ? RotatedBox(
-                            quarterTurns: isEmulator ? 1 : 0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: RTCVideoView(
-                                homeState.localVideo!,
-                                mirror: true,
-                                objectFit: RTCVideoViewObjectFit
-                                    .RTCVideoViewObjectFitCover,
+                        ? BlocBuilder<DeviceInfoBloc, DeviceInfo>(
+                            builder: (_, state) {
+                            return RotatedBox(
+                              quarterTurns: state.isEmulator ?? false ? 1 : 0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: RTCVideoView(
+                                  homeState.localVideo!,
+                                  mirror: true,
+                                  objectFit: RTCVideoViewObjectFit
+                                      .RTCVideoViewObjectFitCover,
+                                ),
                               ),
-                            ),
-                          )
+                            );
+                          })
                         : Center(
                             child: Column(
                               children: [
