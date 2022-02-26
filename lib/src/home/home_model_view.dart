@@ -41,6 +41,12 @@ class HomeModelView extends Cubit<HomeState> {
       localVideo: _videoService.video,
     ));
   }
+
+  @override
+  Future<void> close() async {
+    await _videoService.disposeLocalRenderer();
+    super.close();
+  }
 }
 
 class HomeState {
