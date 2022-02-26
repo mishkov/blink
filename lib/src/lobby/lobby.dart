@@ -124,34 +124,50 @@ class _LobbyState extends State<Lobby> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: ElevatedButton(
-                onPressed: () {
-                  _signaling.hangUp();
-                  Navigator.pop(context);
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(9.0),
-                    ),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14.0,
-                    horizontal: 24,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.leaveQueueButton,
-                    style: const TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
+              child: LeaveQueueButton(signaling: _signaling),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LeaveQueueButton extends StatelessWidget {
+  const LeaveQueueButton({
+    Key? key,
+    required Signaling signaling,
+  })  : _signaling = signaling,
+        super(key: key);
+
+  final Signaling _signaling;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        // TODO: Move this code to LobbyModelView.close() method
+        _signaling.hangUp();
+        Navigator.pop(context);
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.red),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(9.0),
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 14.0,
+          horizontal: 24,
+        ),
+        child: Text(
+          AppLocalizations.of(context)!.leaveQueueButton,
+          style: const TextStyle(
+            fontSize: 14,
+          ),
         ),
       ),
     );
