@@ -49,20 +49,7 @@ class HomeView extends StatelessWidget {
                   Expanded(
                     child: homeState.localVideo != null
                         ? Mirror(video: homeState.localVideo!)
-                        : Center(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Text(
-                                    AppLocalizations.of(context)!
-                                        .cameraIsLoadingNotification,
-                                  ),
-                                ),
-                                const CircularProgressIndicator(),
-                              ],
-                            ),
-                          ),
+                        : const CameraIsLoadingMessage(),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
@@ -83,6 +70,29 @@ class HomeView extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CameraIsLoadingMessage extends StatelessWidget {
+  const CameraIsLoadingMessage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              AppLocalizations.of(context)!.cameraIsLoadingNotification,
+            ),
+          ),
+          const CircularProgressIndicator(),
+        ],
       ),
     );
   }
