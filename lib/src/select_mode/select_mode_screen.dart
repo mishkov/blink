@@ -34,7 +34,7 @@ class SelectModeScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.0),
                               child: const Image(
                                 image: AssetImage(
-                                  'assets/images/robot_doll.jpeg',
+                                  'assets/images/squid_game_player.jpg',
                                 ),
                               ),
                             ),
@@ -91,7 +91,7 @@ class SelectModeScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.0),
                               child: const Image(
                                 image: AssetImage(
-                                  'assets/images/squid_game_player.jpg',
+                                  'assets/images/robot_doll.jpeg',
                                 ),
                               ),
                             ),
