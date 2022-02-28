@@ -1,3 +1,4 @@
+import 'package:blink/src/lobby/lobby.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,8 +25,7 @@ class SelectModeScreen extends StatelessWidget {
                       desctiption: AppLocalizations.of(context)!.realManMode,
                       buttonColor: const Color.fromARGB(255, 255, 212, 155),
                       onPressed: () {
-                        // TODO: Implement navigation to the battle
-                        // with real man screen
+                        Navigator.popAndPushNamed(context, Lobby.routeName);
                       },
                     ),
                   ),
