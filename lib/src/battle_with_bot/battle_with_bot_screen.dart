@@ -122,10 +122,7 @@ class EnemyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(
-      fallbackHeight: 100,
-      fallbackWidth: 100,
-    );
+    return Image.asset('assets/images/bot_image.png');
   }
 }
 
