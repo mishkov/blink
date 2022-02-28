@@ -15,10 +15,7 @@ class Lobby extends StatefulWidget {
 
   const Lobby({
     Key? key,
-    required this.homeModelView,
   }) : super(key: key);
-
-  final HomeModelView homeModelView;
 
   @override
   _LobbyState createState() => _LobbyState();
