@@ -17,11 +17,12 @@ class BattleWithBotScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: BlocProvider<BattleWithBotModelView>(
         create: (context) {
           return BattleWithBotModelView(
-            localizations: AppLocalizations.of(context)!,
+            localizations: localizations,
           );
         },
         child: BlocListener<BattleWithBotModelView, BattleWithBotState>(
