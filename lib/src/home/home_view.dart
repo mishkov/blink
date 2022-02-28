@@ -109,19 +109,21 @@ class Mirror extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DeviceInfoBloc, DeviceInfo>(builder: (_, state) {
-      return RotatedBox(
-        quarterTurns: state.isEmulator ?? false ? 1 : 0,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: RTCVideoView(
-            video,
-            mirror: true,
-            objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+    return BlocBuilder<DeviceInfoBloc, DeviceInfo>(
+      builder: (_, state) {
+        return RotatedBox(
+          quarterTurns: state.isEmulator ?? false ? 1 : 0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: RTCVideoView(
+              video,
+              mirror: true,
+              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
