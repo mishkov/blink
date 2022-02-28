@@ -1,5 +1,4 @@
 import 'package:blink/src/battle_with_bot/battle_with_bot_model_view.dart';
-import 'package:blink/src/local_camera/local_camera_service.dart';
 import 'package:blink/src/lose/lose_screen.dart';
 import 'package:blink/src/win/win_screen.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +121,23 @@ class EnemyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('assets/images/bot_image.png');
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return FittedBox(
+        fit: BoxFit.fill,
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 31, 30, 30),
+          ),
+          child: Image.asset(
+            'assets/images/bot_image.png',
+          ),
+        ),
+      );
+    });
   }
 }
 
