@@ -27,6 +27,10 @@
   "bidInputTitle": "Bid (Not working now)",
   "cameraIsLoadingNotification": "Please wait for camera...",
 
+  "realManMode": "Real Man",
+  "botMode": "Bot",
+  "homeButton": "Home",
+
   "requestToWaitForEnemy": "Please wait for another player...",
   "leaveQueueButton": "Leave queue"
 }
