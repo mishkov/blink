@@ -1,3 +1,4 @@
+import 'package:blink/src/battle_with_bot/battle_with_bot_screen.dart';
 import 'package:blink/src/device_info/device_info_bloc.dart';
 import 'package:blink/src/home/signaling.dart';
 import 'package:blink/src/lobby/lobby.dart';
@@ -96,6 +97,8 @@ class BlinkApp extends StatelessWidget {
                           return const SelectModeScreen();
                         case Lobby.routeName:
                           return const Lobby();
+                        case BattleWithBotScreen.routeName:
+                          return const BattleWithBotScreen();
                         case LoseScreen.routeName:
                           final signaling = args!['signaling'];
                           return LoseScreen(
