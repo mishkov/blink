@@ -105,9 +105,9 @@ class BlinkApp extends StatelessWidget {
                             signaling: signaling,
                           );
                         case WinScreen.routeName:
+                          final signaling = args!['signaling'];
                           return WinScreen(
-                            signaling: (routeSettings.arguments
-                                as Map)['signaling'] as Signaling,
+                            signaling: signaling,
                           );
                         case HomeView.routeName:
                         default:
