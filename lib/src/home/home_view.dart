@@ -199,7 +199,9 @@ class PlayButton extends StatelessWidget {
               //
               // final args = {
               //   'homeModelView': cubit,
-              //   'localVideo': localVideo, // this parameters is not used now
+              //   // this parameters is not used now
+              //   'localVideo': localVideo,
+              //   // this parameters is not used now
               //   'eyesOpenStream': eyesOpenStream,
               // };
               // Navigator.pushNamed(context, Lobby.routeName, arguments: args);
