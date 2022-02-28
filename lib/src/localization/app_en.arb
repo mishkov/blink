@@ -34,5 +34,6 @@
   "requestToWaitForEnemy": "Please wait for another player...",
   "leaveQueueButton": "Leave queue",
   
-  "requestToWait": "Please wait..."
+  "requestToWait": "Please wait...",
+  "doNotBlinkLabel": "Don't bink!!!"
 }
