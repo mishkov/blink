@@ -1,6 +1,7 @@
 import 'package:blink/src/device_info/device_info_bloc.dart';
 import 'package:blink/src/home/signaling.dart';
 import 'package:blink/src/lobby/lobby.dart';
+import 'package:blink/src/select_mode/select_mode_screen.dart';
 import 'package:blink/src/win/win_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +92,8 @@ class BlinkApp extends StatelessWidget {
                           return SettingsView(controller: settingsController);
                         case LoginView.routeName:
                           return const LoginView();
+                        case SelectModeScreen.routeName:
+                          return const SelectModeScreen();
                         case Lobby.routeName:
                           return Lobby(
                             homeModelView: args!['homeModelView'],
