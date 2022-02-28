@@ -95,9 +95,7 @@ class BlinkApp extends StatelessWidget {
                         case SelectModeScreen.routeName:
                           return const SelectModeScreen();
                         case Lobby.routeName:
-                          return Lobby(
-                            homeModelView: args!['homeModelView'],
-                          );
+                          return const Lobby();
                         case LoseScreen.routeName:
                           final signaling = args!['signaling'];
                           return LoseScreen(
