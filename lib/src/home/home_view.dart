@@ -198,6 +198,7 @@ class PlayButton extends StatelessWidget {
               // This code was actual in version without SelectModeScreen
               //
               // final args = {
+              //   // this parameter have never been used
               //   'homeModelView': cubit,
               //   // this parameters is not used now
               //   'localVideo': localVideo,
