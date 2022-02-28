@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../home/home_view.dart';
 
@@ -40,8 +41,9 @@ class SelectModeScreen extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8),
-                              // TODO: Implement localization
-                              child: Text('Real Man'),
+                              child: Text(
+                                AppLocalizations.of(context)!.realManMode,
+                              ),
                             ),
                             Padding(
                               padding:
@@ -61,15 +63,14 @@ class SelectModeScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
                                     vertical: 14.0,
                                     horizontal: 24,
                                   ),
                                   child: Text(
-                                    // TODO: Implement localization
-                                    'Play',
-                                    style: TextStyle(
+                                    AppLocalizations.of(context)!.playButton,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                     ),
                                   ),
@@ -97,8 +98,8 @@ class SelectModeScreen extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8),
-                              // TODO: Implement localization
-                              child: Text('Bot'),
+                              child:
+                                  Text(AppLocalizations.of(context)!.botMode),
                             ),
                             Padding(
                               padding:
@@ -118,15 +119,14 @@ class SelectModeScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
                                     vertical: 14.0,
                                     horizontal: 24,
                                   ),
                                   child: Text(
-                                    // TODO: Implement localization
-                                    'Play',
-                                    style: TextStyle(
+                                    AppLocalizations.of(context)!.playButton,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                     ),
                                   ),
@@ -154,15 +154,14 @@ class SelectModeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 14.0,
                       horizontal: 24,
                     ),
                     child: Text(
-                      // TODO: Implement localization
-                      'Home',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.homeButton,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
