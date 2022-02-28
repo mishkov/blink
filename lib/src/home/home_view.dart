@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blink/src/drawer/app_drawer.dart';
 import 'package:blink/src/home/home_model_view.dart';
 import 'package:blink/src/lobby/lobby.dart';
+import 'package:blink/src/select_mode/select_mode_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -194,12 +195,16 @@ class PlayButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: localVideo != null && eyesOpenStream != null
           ? () {
-              final args = {
-                'homeModelView': cubit,
-                'localVideo': localVideo,
-                'eyesOpenStream': eyesOpenStream,
-              };
-              Navigator.pushNamed(context, Lobby.routeName, arguments: args);
+              // This code was actual in version without SelectModeScreen
+              //
+              // final args = {
+              //   'homeModelView': cubit,
+              //   'localVideo': localVideo,
+              //   'eyesOpenStream': eyesOpenStream,
+              // };
+              // Navigator.pushNamed(context, Lobby.routeName, arguments: args);
+
+              Navigator.pushNamed(context, SelectModeScreen.routeName);
             }
           : null,
       style: ButtonStyle(
