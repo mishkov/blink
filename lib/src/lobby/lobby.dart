@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:blink/src/local_camera/local_camera_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,12 +16,10 @@ class Lobby extends StatefulWidget {
   const Lobby({
     Key? key,
     required this.homeModelView,
-    required this.localVideo,
     required this.eyesOpenStream,
   }) : super(key: key);
 
   final HomeModelView homeModelView;
-  final RTCVideoRenderer localVideo;
   final Stream<dynamic>? eyesOpenStream;
 
   @override
@@ -37,7 +36,7 @@ class _LobbyState extends State<Lobby> {
     super.initState();
 
     // TODO: Move all of this initializations to `LobbyModelView`
-    _signaling.setLocalMediaStream(widget.localVideo);
+    _signaling.setLocalMediaStream(LocalCameraService().video);
 
     _remoteRenderer.initialize().then((_) {
       _signaling.initRemoteMediaStream(_remoteRenderer);
@@ -85,7 +84,9 @@ class _LobbyState extends State<Lobby> {
       MaterialPageRoute(
         builder: (context) {
           return BattleScreen(
-            localVideo: widget.localVideo,
+            // TODO: Remove LocalCameraService().video to hell and move it to
+            // modelview of this screen
+            localVideo: LocalCameraService().video,
             remoteVideo: _remoteRenderer,
             eyesOpenStream: widget.eyesOpenStream!,
             signaling: _signaling,
