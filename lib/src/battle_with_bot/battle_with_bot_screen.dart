@@ -11,6 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../device_info/device_info_bloc.dart';
 
 class BattleWithBotScreen extends StatelessWidget {
+  static const routeName = '/battle_with_bot';
+
   const BattleWithBotScreen({Key? key}) : super(key: key);
 
   @override
