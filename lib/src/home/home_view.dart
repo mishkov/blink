@@ -195,6 +195,8 @@ class PlayButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: localVideo != null && eyesOpenStream != null
           ? () {
+              // TODO: Remove comment below
+              //
               // This code was actual in version without SelectModeScreen
               //
               // final args = {
