@@ -97,7 +97,6 @@ class BlinkApp extends StatelessWidget {
                         case Lobby.routeName:
                           return Lobby(
                             homeModelView: args!['homeModelView'],
-                            localVideo: args['localVideo'],
                             eyesOpenStream: args['eyesOpenStream'],
                           );
                         case LoseScreen.routeName:
