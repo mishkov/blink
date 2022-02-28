@@ -155,11 +155,20 @@ class LocalVideo extends StatelessWidget {
       height: 140,
       child: BlocBuilder<DeviceInfoBloc, DeviceInfo>(
         builder: (_, state) {
-          return RotatedBox(
-            quarterTurns: state.isEmulator ?? false ? 3 : 0,
-            child: RTCVideoView(
-              video,
-              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              border: Border.all(color: Colors.blue, width: 2),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: RotatedBox(
+                quarterTurns: state.isEmulator ?? false ? 3 : 0,
+                child: RTCVideoView(
+                  video,
+                  objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+                ),
+              ),
             ),
           );
         },
