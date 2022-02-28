@@ -16,11 +16,9 @@ class Lobby extends StatefulWidget {
   const Lobby({
     Key? key,
     required this.homeModelView,
-    required this.eyesOpenStream,
   }) : super(key: key);
 
   final HomeModelView homeModelView;
-  final Stream<dynamic>? eyesOpenStream;
 
   @override
   _LobbyState createState() => _LobbyState();
@@ -88,7 +86,9 @@ class _LobbyState extends State<Lobby> {
             // modelview of this screen
             localVideo: LocalCameraService().video,
             remoteVideo: _remoteRenderer,
-            eyesOpenStream: widget.eyesOpenStream!,
+            // TODO: Like in few lines above you have to remove this code from
+            // here and put it to the modelview of this screen
+            eyesOpenStream: LocalCameraService().eyesOpenStream!,
             signaling: _signaling,
             battleStartTime: battleStartTime,
           );
