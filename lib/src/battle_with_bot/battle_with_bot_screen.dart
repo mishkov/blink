@@ -100,6 +100,7 @@ class Countdown extends StatelessWidget {
       visible: visible,
       child: Text(
         label,
+        textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 70,
           color: Colors.blue,
