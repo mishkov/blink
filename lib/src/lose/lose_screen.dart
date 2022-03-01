@@ -53,7 +53,7 @@ class _LoseScreenState extends State<LoseScreen> {
               padding: const EdgeInsets.only(top: 20, bottom: 40),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, HomeView.routeName);
+                  Navigator.pop(context);
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.blue),
