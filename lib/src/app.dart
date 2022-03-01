@@ -86,8 +86,6 @@ class BlinkApp extends StatelessWidget {
                 builder: (BuildContext context) {
                   return Builder(
                     builder: (_) {
-                      final args =
-                          routeSettings.arguments as Map<String, dynamic>?;
                       switch (routeSettings.name) {
                         case SettingsView.routeName:
                           return SettingsView(controller: settingsController);
@@ -100,15 +98,9 @@ class BlinkApp extends StatelessWidget {
                         case BattleWithBotScreen.routeName:
                           return const BattleWithBotScreen();
                         case LoseScreen.routeName:
-                          final signaling = args!['signaling'];
-                          return LoseScreen(
-                            signaling: signaling,
-                          );
+                          return const LoseScreen();
                         case WinScreen.routeName:
-                          final signaling = args!['signaling'];
-                          return WinScreen(
-                            signaling: signaling,
-                          );
+                          return const WinScreen();
                         case HomeView.routeName:
                         default:
                           if (FirebaseAuth.instance.currentUser == null) {
