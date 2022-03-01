@@ -113,13 +113,13 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   void goToLoseScreen() {
-    Navigator.popAndPushNamed(context, LoseScreen.routeName,
-        arguments: {'signaling': widget.signaling});
+    widget.signaling.hangUp();
+    Navigator.popAndPushNamed(context, LoseScreen.routeName);
   }
 
   void goToWinScreen() {
-    Navigator.popAndPushNamed(context, WinScreen.routeName,
-        arguments: {'signaling': widget.signaling});
+    widget.signaling.hangUp();
+    Navigator.popAndPushNamed(context, WinScreen.routeName);
   }
 
   Duration timerDuration(int count, DateTime end) {
