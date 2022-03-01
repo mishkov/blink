@@ -1,25 +1,17 @@
-import 'package:blink/src/home/signaling.dart';
 import 'package:flutter/material.dart';
 
 import '../home/home_view.dart';
 
 class WinScreen extends StatefulWidget {
   static const routeName = '/winscreen';
-  final Signaling signaling;
 
-  const WinScreen({Key? key, required this.signaling}) : super(key: key);
+  const WinScreen({Key? key}) : super(key: key);
 
   @override
   State<WinScreen> createState() => _WinScreenState();
 }
 
 class _WinScreenState extends State<WinScreen> {
-  @override
-  void dispose() {
-    widget.signaling.hangUp();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
