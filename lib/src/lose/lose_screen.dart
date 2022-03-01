@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../home/home_view.dart';
-import '../home/signaling.dart';
 
 class LoseScreen extends StatefulWidget {
   static const routeName = '/losescreen';
 
-  final Signaling signaling;
-
-  const LoseScreen({Key? key, required this.signaling}) : super(key: key);
+  const LoseScreen({Key? key}) : super(key: key);
 
   @override
   State<LoseScreen> createState() => _LoseScreenState();
 }
 
 class _LoseScreenState extends State<LoseScreen> {
-  @override
-  void dispose() {
-    widget.signaling.hangUp();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
