@@ -23,7 +23,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           # TODO: Add code to control version of flutter
-          flutter-version: "2.10.2"
+          channel: "stable"
       - name: Update Flutter SDK
         run: flutter upgrade
       - name: Print build start message
