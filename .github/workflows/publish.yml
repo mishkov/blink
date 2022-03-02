@@ -24,6 +24,8 @@ jobs:
         with:
           # TODO: Add code to control version of flutter
           flutter-version: "2.10.2"
+      - name: Update Flutter SDK
+        run: flutter upgrade
       - name: Print build start message
         run: echo 'Strating to build new version...'
       - run: flutter pub get
