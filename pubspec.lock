@@ -264,9 +264,11 @@ packages:
   flutter_webrtc:
     dependency: "direct main"
     description:
-      path: "../flutter-webrtc"
-      relative: true
-    source: path
+      path: "."
+      ref: eyes-open-stream
+      resolved-ref: d6c24e021d688b703d492633cabb1a60aebc19be
+      url: "https://github.com/mishkov/flutter-webrtc.git"
+    source: git
     version: "0.8.0"
   google_ml_kit:
     dependency: "direct main"
