@@ -11,8 +11,30 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "11"
+      - uses: subosito/flutter-action@v2
+        with:
+          # TODO: Add code to control version of flutter
+          flutter-version: "2.5.3"
+      - name: Print build start message
+        run: echo 'Strating to build new version...'
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build appbundle
+      - name: Print build end message
+        run: echo 'New version is built'
+
   # This workflow contains a single job called "publish"
   publish:
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -21,15 +43,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Print start message
+      - name: Print publish start message
         run: echo 'Strating to publish new version...'
 
       - uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.netler.blink
-          # TODO: Build appbundle also with github action
-          releaseFiles: ${{ SIGNED_RELEASE_FILE}}
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: internal
           inAppUpdatePriority: 2
           whatsNewDirectory: distribution/whatsnew
+      - name: Print publish end message
+        run: echo 'New version is sent to publish!'
