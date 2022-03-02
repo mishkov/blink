@@ -27,13 +27,14 @@ dependencies:
   permission_handler: ^8.2.6
   provider: ^6.0.1
   flutter_webrtc:
-    path: ../flutter-webrtc
+    # path: ../flutter-webrtc
+    # TODO: Fix this
     # code above is used because I had to fix null pointer exception immediately
     # so now you have to fix it on github and change dependencie path
-    #
-    # git:
-    #   url: https://github.com/mishkov/flutter-webrtc.git
-    #   ref: eyes-open-stream
+
+    git:
+      url: https://github.com/mishkov/flutter-webrtc.git
+      ref: eyes-open-stream
   flutter_arc_text: ^0.5.0
 
 dev_dependencies:
