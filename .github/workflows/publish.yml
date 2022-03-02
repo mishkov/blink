@@ -26,6 +26,8 @@ jobs:
           channel: "stable"
       - name: Update Flutter SDK
         run: flutter upgrade
+      - name: Get SDK version
+        run: flutter --version
       - name: Print build start message
         run: echo 'Strating to build new version...'
       - run: flutter pub get
