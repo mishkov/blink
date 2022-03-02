@@ -1,0 +1,36 @@
+name: Upload appbundle to the Google Play
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push event only for the master branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "publish"
+  publish:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Print start message
+        run: echo 'Strating to publish new version...'
+
+      - uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: com.netler.blink
+          # TODO: Build appbundle also with github action
+          releaseFiles: ${{ SIGNED_RELEASE_FILE}}
+          track: internal
+          inAppUpdatePriority: 2
+          # TODO: Add file with whatsnew description
+          whatsNewDirectory: distribution/whatsnew
