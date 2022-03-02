@@ -31,7 +31,7 @@ jobs:
       - name: Print build start message
         run: echo 'Strating to build new version...'
       - name: Define minSdkVersion
-        run: echo '\n$LOCAL_PROPERTIES' >> android/local.properties
+        run: echo '\n${{ $LOCAL_PROPERTIES }}' >> android/local.properties
       - run: flutter pub get
       - run: flutter test
       - run: flutter build appbundle
