@@ -2,5 +2,38 @@
   "appTitle": "blink_prototype",
   "@appTitle": {
     "description": "The title of the application"
-  }
+  },
+  "errorDialogTitle": "Error",
+  "tryAgain": "Try again",
+  "okButton": "OK",
+  "loginWithGoogleButton": "Login with Google",
+  "loginDialogTitle": "Login",
+  "loginDialogMessage": "Please wait for login...",
+  "noSignedInUserError": "No signed in user",
+  "invalidCredentialError": "The credential is malformed or has expired.",
+  "unknownError": "Unknown error",
+
+  "highestTimeTitle": "The Highest Time",
+  "balanceTitle": "Balance",
+  "numberOfEarned": "Won",
+  "numberOfSpent": "Lost",
+  "settingsTitle": "Settings",
+  "logoutButton": "Logout",
+
+  "playButton": "Play",
+  "eyesIsOpenStatus": "Eyes is open",
+  "eyesIsClosedStatus": "Eyes is close",
+  "requestToPutFaceToCamera": "Please put your face to camera",
+  "bidInputTitle": "Bid (Not working now)",
+  "cameraIsLoadingNotification": "Please wait for camera...",
+
+  "realManMode": "Real Man",
+  "botMode": "Bot",
+  "homeButton": "Home",
+
+  "requestToWaitForEnemy": "Please wait for another player...",
+  "leaveQueueButton": "Leave queue",
+  
+  "requestToWait": "Please wait...",
+  "doNotBlinkLabel": "Don't bink!!!"
 }
