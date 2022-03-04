@@ -7,6 +7,8 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:blink/src/local_camera/local_camera_service.dart';
 
+import '../user/user_service.dart';
+
 class BattleWithBotModelView extends Cubit<BattleWithBotState> {
   final AppLocalizations _localizations;
   Timer? _eyesOfEnemyIsOpenTimer;
@@ -90,6 +92,7 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
       _eyesOpenStreamSubscription?.cancel();
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
+      _checkHighestTime();
     }
   }
 
@@ -99,12 +102,23 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
     _eyesOfEnemyIsOpenTimer?.cancel();
     _stopwatchTimer?.cancel();
     _stopwatch.stop();
+    _checkHighestTime();
 
     emit(state.copyWith(isLose: true));
   }
 
   void _updateStopwatch(Timer timer) {
     emit(state.copyWith(stopwatchLabel: _stopwatchLabel));
+  }
+
+  Future<void> _checkHighestTime() async {
+    final userService = UserService();
+    final highestTime = userService.user?.highestTime;
+    if (highestTime != null) {
+      if (highestTime < _stopwatch.elapsedMilliseconds) {
+        userService.updateHighestTime(_stopwatch.elapsedMilliseconds);
+      }
+    }
   }
 }
 
