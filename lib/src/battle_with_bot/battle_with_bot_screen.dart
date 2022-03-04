@@ -73,6 +73,25 @@ class BattleWithBotScreen extends StatelessWidget {
                       label: state.countdownLabel,
                     ),
                   ),
+                  Positioned(
+                    bottom: 100,
+                    child: Visibility(
+                      visible: state.showStopwatch,
+                      child: Text(
+                        state.stopwatchLabel,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 70,
+                          color: Colors.blue,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black38,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               );
             },
