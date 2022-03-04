@@ -82,6 +82,17 @@ class UserService {
     _userStreamController.add(firebaseUser);
   }
 
+  Future<void> updateHighestTime(int highesTimeInMilliseconds) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    await userDoc.update({'highest_time': highesTimeInMilliseconds});
+  }
+
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     await _googleSignInConfiguration.signOut();
