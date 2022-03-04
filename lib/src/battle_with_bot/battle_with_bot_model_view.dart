@@ -22,6 +22,8 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
           showCountdown: true,
           isLose: false,
           isWin: false,
+          stopwatchLabel: '',
+          showStopwatch: false,
         )) {
     const oneSecond = Duration(seconds: 1);
     Timer.periodic(oneSecond, _decreaseCountdown);
@@ -87,6 +89,8 @@ class BattleWithBotState {
   final bool showCountdown;
   final bool isWin;
   final bool isLose;
+  final String stopwatchLabel;
+  final bool showStopwatch;
 
   BattleWithBotState({
     required this.video,
@@ -94,6 +98,8 @@ class BattleWithBotState {
     required this.showCountdown,
     required this.isWin,
     required this.isLose,
+    required this.stopwatchLabel,
+    required this.showStopwatch,
   });
 
   BattleWithBotState copyWith({
@@ -102,6 +108,8 @@ class BattleWithBotState {
     bool? showCountdown,
     bool? isWin,
     bool? isLose,
+    String? stopwatchLabel,
+    bool? showStopwatch,
   }) {
     return BattleWithBotState(
       video: video ?? this.video,
@@ -109,6 +117,8 @@ class BattleWithBotState {
       showCountdown: showCountdown ?? this.showCountdown,
       isWin: isWin ?? this.isWin,
       isLose: isLose ?? this.isLose,
+      stopwatchLabel: stopwatchLabel ?? this.stopwatchLabel,
+      showStopwatch: showStopwatch ?? this.showStopwatch,
     );
   }
 }
