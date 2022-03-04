@@ -42,7 +42,7 @@ class HomeModelView extends Cubit<HomeState> {
       localVideo: _videoService.video,
     ));
 
-    await UserService().initUserFields();
+    await UserService().init();
   }
 
   @override
