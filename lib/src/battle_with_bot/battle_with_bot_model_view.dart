@@ -89,6 +89,7 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
       emit(state.copyWith(isWin: true));
       _eyesOpenStreamSubscription?.cancel();
       _stopwatchTimer?.cancel();
+      _stopwatch.stop();
     }
   }
 
@@ -97,6 +98,7 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
     _eyesOpenStreamSubscription?.cancel();
     _eyesOfEnemyIsOpenTimer?.cancel();
     _stopwatchTimer?.cancel();
+    _stopwatch.stop();
 
     emit(state.copyWith(isLose: true));
   }
