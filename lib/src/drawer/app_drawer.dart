@@ -16,105 +16,104 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: BlocProvider<AppDrawerViewModel>(
         create: (_) => AppDrawerViewModel(),
-        child: BlocBuilder<AppDrawerViewModel, AppDrawerState>(
-          builder: (context, state) {
-            return DrawerContent(user: state.user);
-          },
-        ),
+        child: const DrawerContent(),
       ),
     );
   }
 }
 
 class DrawerContent extends StatelessWidget {
-  final User user;
-  const DrawerContent({required this.user, Key? key}) : super(key: key);
+  const DrawerContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 80.0, left: 8),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage:
-                    user.photoUrl != null ? NetworkImage(user.photoUrl!) : null,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(user.name ?? 'no name'),
-                    Text(user.email ?? 'no email'),
-                  ],
+    return BlocBuilder<AppDrawerViewModel, AppDrawerState>(
+        builder: (context, state) {
+      return ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0, left: 8),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: state.photoUrl.isNotEmpty
+                      ? NetworkImage(state.photoUrl)
+                      : null,
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(state.name),
+                      Text(state.email),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(AppLocalizations.of(context)!.highestTimeTitle),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-          child: Text((user.highestTime ?? 'no highest time').toString()),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(AppLocalizations.of(context)!.balanceTitle),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-          child: Text((user.balance ?? 'no balance').toString()),
-        ),
-        const Divider(),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(AppLocalizations.of(context)!.numberOfEarned),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-          child: Text((user.won ?? 'no won').toString()),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(AppLocalizations.of(context)!.numberOfSpent),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-          child: Text((user.lost ?? 'no lost').toString()),
-        ),
-        const Divider(),
-        TextButton(
-          style: TextButton.styleFrom(
-            alignment: Alignment.centerLeft,
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(AppLocalizations.of(context)!.highestTimeTitle),
           ),
-          onPressed: () {
-            Navigator.pushNamed(context, SettingsView.routeName);
-          },
-          child: Text(
-            AppLocalizations.of(context)!.settingsTitle,
-            style: const TextStyle(color: Colors.blue),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
+            child: Text(state.highestTime),
           ),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-            alignment: Alignment.centerLeft,
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(AppLocalizations.of(context)!.balanceTitle),
           ),
-          onPressed: () {
-            UserService().logout();
-            Navigator.restorablePushNamed(context, LoginView.routeName);
-          },
-          child: Text(
-            AppLocalizations.of(context)!.logoutButton,
-            style: const TextStyle(color: Colors.blue),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
+            child: Text(state.balance),
           ),
-        ),
-      ],
-    );
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(AppLocalizations.of(context)!.numberOfEarned),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
+            child: Text(state.won),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(AppLocalizations.of(context)!.numberOfSpent),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
+            child: Text(state.lost),
+          ),
+          const Divider(),
+          TextButton(
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerLeft,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, SettingsView.routeName);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.settingsTitle,
+              style: const TextStyle(color: Colors.blue),
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerLeft,
+            ),
+            onPressed: () {
+              UserService().logout();
+              Navigator.restorablePushNamed(context, LoginView.routeName);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.logoutButton,
+              style: const TextStyle(color: Colors.blue),
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
