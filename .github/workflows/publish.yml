@@ -51,6 +51,7 @@ jobs:
           packageName: com.netler.blink
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: internal
+          status: draft
           inAppUpdatePriority: 2
           whatsNewDirectory: distribution/whatsnew
       - name: Print publish end message
