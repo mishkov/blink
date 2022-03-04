@@ -7,6 +7,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import '../home/signaling.dart';
 import '../lose/lose_screen.dart';
+import '../user/user_service.dart';
 import '../win/win_screen.dart';
 
 class BattleScreen extends StatefulWidget {
@@ -36,6 +37,10 @@ class _BattleScreenState extends State<BattleScreen>
   TickerFuture? blinkLabelFutureTicker;
   int? downcount;
   bool hideDowncount = false;
+  final _stopwatch = Stopwatch();
+  Timer? _stopwatchTimer;
+  String stopwatchLabel = '';
+  bool showStopwatch = false;
 
   bool _isEmulator = false;
 
@@ -81,6 +86,9 @@ class _BattleScreenState extends State<BattleScreen>
 
     widget.signaling.onWin = () {
       goToWinScreen();
+      _stopwatchTimer?.cancel();
+      _stopwatch.stop();
+      _checkHighestTime();
     };
     widget.signaling.onLose = () {
       blinkLabelFutureTicker!.then((_) {
@@ -88,6 +96,9 @@ class _BattleScreenState extends State<BattleScreen>
       }).then((_) {
         goToLoseScreen();
       });
+      _stopwatchTimer?.cancel();
+      _stopwatch.stop();
+      _checkHighestTime();
     };
     widget.signaling.onDraw = () {
       // TODO: change to draw screen
@@ -160,12 +171,38 @@ class _BattleScreenState extends State<BattleScreen>
           }
           widget.signaling.sendBlinkTime();
         });
+        const updateFrequency = Duration(milliseconds: 100);
+        _stopwatch.start();
+        setState(() {
+          showStopwatch = true;
+          stopwatchLabel = _stopwatchLabel;
+        });
+        _stopwatchTimer = Timer.periodic(updateFrequency, _updateStopwatch);
 
         setState(() {
           hideDowncount = true;
         });
       }
     });
+  }
+
+  String get _stopwatchLabel =>
+      '${_stopwatch.elapsed.inMinutes % 60}:${_stopwatch.elapsed.inSeconds % 60}:${(_stopwatch.elapsed.inMilliseconds % 1000) ~/ 100}';
+
+  void _updateStopwatch(Timer timer) {
+    setState(() {
+      stopwatchLabel = _stopwatchLabel;
+    });
+  }
+
+  Future<void> _checkHighestTime() async {
+    final userService = UserService();
+    final highestTime = userService.user?.highestTime;
+    if (highestTime != null) {
+      if (highestTime < _stopwatch.elapsedMilliseconds) {
+        await userService.updateHighestTime(_stopwatch.elapsedMilliseconds);
+      }
+    }
   }
 
   @override
@@ -229,6 +266,25 @@ class _BattleScreenState extends State<BattleScreen>
               visible: !hideDowncount,
               child: Text(
                 downcount != 1 ? downcount.toString() : 'NOT BLINK!!!',
+                style: const TextStyle(
+                  fontSize: 70,
+                  color: Colors.blue,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black38,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 100,
+            child: Visibility(
+              visible: showStopwatch,
+              child: Text(
+                stopwatchLabel,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 70,
                   color: Colors.blue,
