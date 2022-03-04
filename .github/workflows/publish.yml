@@ -45,7 +45,7 @@ jobs:
       - name: Print publish start message
         run: echo 'Strating to publish new version...'
 
-      - uses: r0adkll/upload-google-play@v1
+      - uses: r0adkll/upload-google-play@v1.0.15
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.netler.blink
