@@ -71,7 +71,8 @@ class UserService {
     }
 
     final usersCollectino = FirebaseFirestore.instance.collection('users');
-    final userSnapshot = await usersCollectino.doc(user.uid).get();
+    final userRef = usersCollectino.doc(user.uid);
+    final userSnapshot = await userRef.get();
     final firebaseUser = firebase_user.User.empty();
     firebaseUser.setDataFromFireStore(userSnapshot.data()!);
     firebaseUser.name = user.displayName;
@@ -80,6 +81,18 @@ class UserService {
 
     _user = firebaseUser;
     _userStreamController.add(firebaseUser);
+
+    userRef.snapshots().listen((document) {
+      final data = document.data()!;
+
+      final updatedUser = firebase_user.User.empty()
+        ..setDataFromFireStore(data);
+      _user
+        ?..balance = updatedUser.balance
+        ..highestTime = updatedUser.highestTime
+        ..won = updatedUser.won
+        ..lost = updatedUser.lost;
+    });
   }
 
   Future<void> updateHighestTime(int highesTimeInMilliseconds) async {
