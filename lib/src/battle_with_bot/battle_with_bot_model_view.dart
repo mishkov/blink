@@ -13,6 +13,8 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
   bool _didUserBlink = false;
   StreamSubscription? _eyesOpenStreamSubscription;
   int _countdown = 10;
+  Stopwatch _stopwatch = Stopwatch();
+  Timer? _stopwatchTimer;
 
   BattleWithBotModelView({required localizations})
       : _localizations = localizations,
@@ -53,16 +55,20 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
       _onEnemyBlinks,
     );
 
+    const updateFrequency = Duration(milliseconds: 100);
+    _stopwatch.start();
+    emit(state.copyWith(
+      showStopwatch: true,
+      stopwatchLabel: _stopwatchLabel,
+    ));
+    _stopwatchTimer = Timer.periodic(updateFrequency, _updateStopwatch);
+
     _eyesOpenStreamSubscription = LocalCameraService().eyesOpenStream?.listen(
       (event) {
         if (event is bool) {
           final isEyesOpen = event;
           if (!isEyesOpen) {
-            _didUserBlink = true;
-            _eyesOpenStreamSubscription?.cancel();
-            _eyesOfEnemyIsOpenTimer?.cancel();
-
-            emit(state.copyWith(isLose: true));
+            _onUserBlinks();
           }
         }
       },
@@ -75,11 +81,28 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
     return from + math.Random().nextInt(to - from);
   }
 
+  String get _stopwatchLabel =>
+      '${_stopwatch.elapsed.inMinutes % 60}:${_stopwatch.elapsed.inSeconds % 60}:${(_stopwatch.elapsed.inMilliseconds % 1000) ~/ 100}';
+
   void _onEnemyBlinks() {
     if (!_didUserBlink) {
       emit(state.copyWith(isWin: true));
       _eyesOpenStreamSubscription?.cancel();
+      _stopwatchTimer?.cancel();
     }
+  }
+
+  void _onUserBlinks() {
+    _didUserBlink = true;
+    _eyesOpenStreamSubscription?.cancel();
+    _eyesOfEnemyIsOpenTimer?.cancel();
+    _stopwatchTimer?.cancel();
+
+    emit(state.copyWith(isLose: true));
+  }
+
+  void _updateStopwatch(Timer timer) {
+    emit(state.copyWith(stopwatchLabel: _stopwatchLabel));
   }
 }
 
