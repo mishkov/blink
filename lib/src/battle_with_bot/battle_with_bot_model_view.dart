@@ -116,7 +116,7 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
     final highestTime = userService.user?.highestTime;
     if (highestTime != null) {
       if (highestTime < _stopwatch.elapsedMilliseconds) {
-        userService.updateHighestTime(_stopwatch.elapsedMilliseconds);
+        await userService.updateHighestTime(_stopwatch.elapsedMilliseconds);
       }
     }
   }
