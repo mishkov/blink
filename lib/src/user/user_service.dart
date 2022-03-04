@@ -87,11 +87,13 @@ class UserService {
 
       final updatedUser = firebase_user.User.empty()
         ..setDataFromFireStore(data);
-      _user
-        ?..balance = updatedUser.balance
+      _user!
+        ..balance = updatedUser.balance
         ..highestTime = updatedUser.highestTime
         ..won = updatedUser.won
         ..lost = updatedUser.lost;
+
+      _userStreamController.add(_user!);
     });
   }
 
