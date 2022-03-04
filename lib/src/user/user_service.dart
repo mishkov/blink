@@ -61,10 +61,10 @@ class UserService {
       await userDoc.set(emptyFirebaseUser, SetOptions(merge: true));
     }
 
-    await initUserFields();
+    await init();
   }
 
-  Future<void> initUserFields() async {
+  Future<void> init() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw NoSignedInUserExceptino('No signed in user');
