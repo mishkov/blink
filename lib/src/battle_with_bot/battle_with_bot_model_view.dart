@@ -40,14 +40,14 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
       ));
     } else {
       emit(state.copyWith(showCountdown: false));
-      onBattleStart();
+      _onBattleStart();
       timer.cancel();
     }
 
     _countdown--;
   }
 
-  void onBattleStart() {
+  void _onBattleStart() {
     _eyesOfEnemyIsOpenTimer = Timer(
       _randomTimeOfOpenEyes,
       _onEnemyBlinks,
