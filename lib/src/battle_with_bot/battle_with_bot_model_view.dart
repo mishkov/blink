@@ -13,7 +13,7 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
   bool _didUserBlink = false;
   StreamSubscription? _eyesOpenStreamSubscription;
   int _countdown = 10;
-  Stopwatch _stopwatch = Stopwatch();
+  final _stopwatch = Stopwatch();
   Timer? _stopwatchTimer;
 
   BattleWithBotModelView({required localizations})
