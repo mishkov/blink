@@ -104,7 +104,6 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
       _checkHighestTime();
-      UserService().increaseWins();
     }
   }
 
@@ -115,7 +114,6 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
     _stopwatchTimer?.cancel();
     _stopwatch.stop();
     _checkHighestTime();
-    UserService().increaseDefeats();
 
     emit(state.copyWith(isLose: true));
   }
