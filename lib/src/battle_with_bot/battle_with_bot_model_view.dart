@@ -67,10 +67,14 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
 
     _eyesOpenStreamSubscription = LocalCameraService().eyesOpenStream?.listen(
       (event) {
-        if (event is bool) {
-          final isEyesOpen = event;
-          if (!isEyesOpen) {
+        if (event is bool?) {
+          if (event == null) {
             _onUserBlinks();
+          } else {
+            final isEyesOpen = event;
+            if (!isEyesOpen) {
+              _onUserBlinks();
+            }
           }
         }
       },
