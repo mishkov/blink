@@ -90,8 +90,8 @@ class UserService {
       _user!
         ..balance = updatedUser.balance
         ..highestTime = updatedUser.highestTime
-        ..won = updatedUser.won
-        ..lost = updatedUser.lost;
+        ..wins = updatedUser.wins
+        ..defeats = updatedUser.defeats;
 
       _userStreamController.add(_user!);
     });

@@ -76,7 +76,7 @@ class DrawerContent extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-            child: Text(state.won),
+            child: Text(state.wins),
           ),
           Padding(
             padding: const EdgeInsets.all(8),
@@ -84,7 +84,7 @@ class DrawerContent extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
-            child: Text(state.lost),
+            child: Text(state.defeats),
           ),
           const Divider(),
           TextButton(
