@@ -66,25 +66,32 @@ class BattleWithBotModelView extends Cubit<BattleWithBotState> {
     _stopwatchTimer = Timer.periodic(updateFrequency, _updateStopwatch);
 
     _eyesOpenStreamSubscription = LocalCameraService().eyesOpenStream?.listen(
-      (event) {
-        if (event is bool?) {
-          if (event == null) {
-            _onUserBlinks();
-          } else {
-            final isEyesOpen = event;
-            if (!isEyesOpen) {
-              _onUserBlinks();
-            }
-          }
-        }
-      },
-    );
+          eyesOpenStreamListener,
+          onError: catchErrorOnOpenStreamListener,
+        );
   }
 
   Duration get _randomTimeOfOpenEyes => Duration(seconds: _randomInt(35, 90));
 
   int _randomInt(int from, int to) {
     return from + math.Random().nextInt(to - from);
+  }
+
+  void eyesOpenStreamListener(dynamic event) {
+    if (event is bool?) {
+      if (event == null) {
+        _onUserBlinks();
+      } else {
+        final isEyesOpen = event;
+        if (!isEyesOpen) {
+          _onUserBlinks();
+        }
+      }
+    }
+  }
+
+  void catchErrorOnOpenStreamListener(Object error, StackTrace stackTrace) {
+    _onUserBlinks();
   }
 
   String get _stopwatchLabel =>
