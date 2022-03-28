@@ -25,7 +25,7 @@
   "eyesIsClosedStatus": "Eyes is close",
   "requestToPutFaceToCamera": "Please put your face to camera",
   "bidInputTitle": "Bid in BLK",
-  "bidTimeInputTime": "Bid Time in seconds",
+  "bidTimeInputTitle": "Bid Time in seconds",
   "cameraIsLoadingNotification": "Please wait for camera...",
 
   "realManMode": "Real Man",
