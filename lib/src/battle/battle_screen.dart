@@ -57,27 +57,25 @@ class _BattleScreenState extends State<BattleScreen>
     super.initState();
 
     _bidTimeTimer = Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
-      if (widget.signaling.didUserStand ?? true) {
-        widget.signaling.sendUserDidStandSingal();
-        if (!blinkLabelController.isAnimating &&
-            !blinkLabelController.isCompleted) {
-          blinkLabelFutureTicker = blinkLabelController.forward();
-        } else {
-          blinkLabelFutureTicker!.then((_) {
-            setState(() {
-              standLabel = 'You did stand';
-            });
+      widget.signaling.sendUserDidStandSingal();
+      if (!blinkLabelController.isAnimating &&
+          !blinkLabelController.isCompleted) {
+        blinkLabelFutureTicker = blinkLabelController.forward();
+      } else {
+        blinkLabelFutureTicker!.then((_) {
+          setState(() {
+            standLabel = 'You did stand';
+          });
 
-            blinkLabelFutureTicker = blinkLabelController.forward();
-            blinkLabelFutureTicker!.then((_) {
-              return Future.delayed(const Duration(seconds: 1));
-            }).then((_) {
-              setState(() {
-                standLabel = '';
-              });
+          blinkLabelFutureTicker = blinkLabelController.forward();
+          blinkLabelFutureTicker!.then((_) {
+            return Future.delayed(const Duration(seconds: 1));
+          }).then((_) {
+            setState(() {
+              standLabel = '';
             });
           });
-        }
+        });
       }
     });
 
