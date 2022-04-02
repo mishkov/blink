@@ -57,16 +57,15 @@ class _BattleScreenState extends State<BattleScreen>
     super.initState();
 
     _bidTimeTimer = Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
-      widget.signaling.sendUserDidStandSingal();
+      setState(() {
+        standLabel = 'You did stand';
+      });
+
       if (!blinkLabelController.isAnimating &&
           !blinkLabelController.isCompleted) {
         blinkLabelFutureTicker = blinkLabelController.forward();
       } else {
         blinkLabelFutureTicker!.then((_) {
-          setState(() {
-            standLabel = 'You did stand';
-          });
-
           blinkLabelFutureTicker = blinkLabelController.forward();
           blinkLabelFutureTicker!.then((_) {
             return Future.delayed(const Duration(seconds: 1));
@@ -77,6 +76,8 @@ class _BattleScreenState extends State<BattleScreen>
           });
         });
       }
+
+      widget.signaling.sendUserDidStandSingal();
     });
 
     final countDownStartTime = DateTime.now();
@@ -113,6 +114,27 @@ class _BattleScreenState extends State<BattleScreen>
             });
           });
 
+    widget.signaling.onEnemyDidNotStand = () {
+      setState(() {
+        standLabel = 'Enemy did not stand';
+      });
+
+      if (!blinkLabelController.isAnimating &&
+          !blinkLabelController.isCompleted) {
+        blinkLabelFutureTicker = blinkLabelController.forward();
+      } else {
+        blinkLabelFutureTicker!.then((_) {
+          blinkLabelFutureTicker = blinkLabelController.forward();
+          blinkLabelFutureTicker!.then((_) {
+            return Future.delayed(const Duration(seconds: 1));
+          }).then((_) {
+            setState(() {
+              standLabel = '';
+            });
+          });
+        });
+      }
+    };
     widget.signaling.onWin = () {
       goToWinScreen();
       _stopwatchTimer?.cancel();

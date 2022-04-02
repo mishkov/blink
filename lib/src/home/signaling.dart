@@ -167,6 +167,9 @@ class Signaling {
           break;
         // enemy did not stand
         case 6:
+          if (onEnemyDidNotStand != null) {
+            onEnemyDidNotStand!();
+          }
           if (_didUserStand != null) {
             if (_didUserStand!) {
               sendLoseSignal();
