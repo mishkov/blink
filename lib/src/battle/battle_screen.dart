@@ -136,7 +136,12 @@ class _BattleScreenState extends State<BattleScreen>
       }
     };
     widget.signaling.onWin = () {
-      goToWinScreen();
+      blinkLabelFutureTicker!.then((_) {
+        return Future.delayed(const Duration(seconds: 1));
+      }).then((_) {
+        goToWinScreen();
+      });
+
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
       _checkHighestTime();
