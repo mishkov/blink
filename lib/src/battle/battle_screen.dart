@@ -234,7 +234,8 @@ class _BattleScreenState extends State<BattleScreen>
           if (data is bool) {
             final isUserLoser = !data;
             if (isUserLoser) {
-              if (_bidService.bidInBlk <= _stopwatch.elapsed.inSeconds) {
+              if (_bidService.bidTimeInSeconds <=
+                  _stopwatch.elapsed.inSeconds) {
                 widget.signaling.sendUserDidStandSingal();
                 setState(() {
                   standLabel = 'You did stand';
