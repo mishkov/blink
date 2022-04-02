@@ -34,7 +34,7 @@ dependencies:
 
     git:
       url: https://github.com/mishkov/flutter-webrtc.git
-      ref: eyes-open-stream
+      ref: eyes-open-stream-rotate-adaptive
   flutter_arc_text: ^0.5.0
 
 dev_dependencies:
