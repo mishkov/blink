@@ -187,6 +187,10 @@ class Signaling {
           break;
         // enemy did stand
         case 7:
+          if (onEnemyDidStand != null) {
+            onEnemyDidStand!();
+          }
+
           if (_didUserStand != null) {
             if (_didUserStand!) {
               sendDrawSignal();
