@@ -318,6 +318,8 @@ class _BattleScreenState extends State<BattleScreen>
 
         _bidTimeTimer =
             Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
+          _stopwatchTimer?.cancel();
+          _stopwatch.stop();
           eyesOpenStreamSubscriptoin?.cancel();
           setState(() {
             standLabel = 'You did stand';
