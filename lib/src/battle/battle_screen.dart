@@ -263,7 +263,7 @@ class _BattleScreenState extends State<BattleScreen>
             }
           }
         }, onError: (error, stackTrace) {
-          if (_bidService.bidInBlk <= _stopwatch.elapsed.inSeconds) {
+          if (_bidService.bidTimeInSeconds <= _stopwatch.elapsed.inSeconds) {
             widget.signaling.sendUserDidStandSingal();
             setState(() {
               standLabel = 'You did stand';
