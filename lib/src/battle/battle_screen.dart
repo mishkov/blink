@@ -56,30 +56,7 @@ class _BattleScreenState extends State<BattleScreen>
   void initState() {
     super.initState();
 
-    _bidTimeTimer = Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
-      eyesOpenStreamSubscriptoin?.cancel();
-      setState(() {
-        standLabel = 'You did stand';
-      });
-
-      if (!blinkLabelController.isAnimating &&
-          !blinkLabelController.isCompleted) {
-        blinkLabelFutureTicker = blinkLabelController.forward();
-      } else {
-        blinkLabelFutureTicker!.then((_) {
-          blinkLabelFutureTicker = blinkLabelController.forward();
-          blinkLabelFutureTicker!.then((_) {
-            return Future.delayed(const Duration(seconds: 1));
-          }).then((_) {
-            setState(() {
-              standLabel = '';
-            });
-          });
-        });
-      }
-
-      widget.signaling.sendUserDidStandSingal();
-    });
+    
 
     final countDownStartTime = DateTime.now();
 
@@ -298,6 +275,32 @@ class _BattleScreenState extends State<BattleScreen>
 
         setState(() {
           hideDowncount = true;
+        });
+
+        _bidTimeTimer =
+            Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
+          eyesOpenStreamSubscriptoin?.cancel();
+          setState(() {
+            standLabel = 'You did stand';
+          });
+
+          if (!blinkLabelController.isAnimating &&
+              !blinkLabelController.isCompleted) {
+            blinkLabelFutureTicker = blinkLabelController.forward();
+          } else {
+            blinkLabelFutureTicker!.then((_) {
+              blinkLabelFutureTicker = blinkLabelController.forward();
+              blinkLabelFutureTicker!.then((_) {
+                return Future.delayed(const Duration(seconds: 1));
+              }).then((_) {
+                setState(() {
+                  standLabel = '';
+                });
+              });
+            });
+          }
+
+          widget.signaling.sendUserDidStandSingal();
         });
       }
     });
