@@ -1,3 +1,4 @@
+import 'package:blink/src/bid/bid_service.dart';
 import 'package:blink/src/local_camera/local_camera_service.dart';
 import 'package:blink/src/user/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,12 +6,12 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class HomeModelView extends Cubit<HomeState> {
   final _videoService = LocalCameraService();
-  int _bidInDollars = 1;
+  final BidService _bidService = BidService();
 
   HomeModelView()
       : super(
           HomeState(
-            bidInDollars: 1,
+            bidInBlk: BidService().bidInBlk,
             eyesOpenStream: LocalCameraService().eyesOpenStream,
             localVideo: LocalCameraService().video,
           ),
@@ -18,26 +19,38 @@ class HomeModelView extends Cubit<HomeState> {
     _init();
   }
 
-  set bidInDollars(int? bid) {
+  set bidInBlk(int? bid) {
     if (bid == null) {
-      // TODO: create special exception for this case
-      throw Exception('wrong bid format');
+      // TODONOT: create special exception for this case
+      //throw Exception('wrong bid format');
+      // TODO: create state with error message instead of exception
+
     }
-    if (bid.isNegative) {
-      // TODO: create special exception for this case
-      throw Exception('bid can not be negative');
-    }
-    _bidInDollars = bid;
+    bid ??= 0;
+    _bidService.bidInBlk = bid;
   }
 
-  int get bidInDollars => _bidInDollars;
+  int get bidInBlk => _bidService.bidInBlk;
+
+  set bidTimeInSeconds(int? bidTime) {
+    if (bidTime == null) {
+      // TODONOT: create special exception for this case
+      //throw Exception('wrong bid format');
+      // TODO: create state with error message instead of exception
+
+    }
+    bidTime ??= 0;
+    _bidService.bidTimeInSeconds = bidTime;
+  }
+
+  int get bidTimeInSeconds => _bidService.bidTimeInSeconds;
 
   Future<void> _init() async {
     await _videoService.initLocalRenderer();
     await _videoService.initEyesOpenStream();
 
     emit(HomeState(
-      bidInDollars: _bidInDollars,
+      bidInBlk: _bidService.bidInBlk,
       eyesOpenStream: _videoService.eyesOpenStream,
       localVideo: _videoService.video,
     ));
@@ -57,10 +70,10 @@ class HomeState {
   RTCVideoRenderer? localVideo;
   bool errorHappened;
   String? errorMessage;
-  int? bidInDollars;
+  int? bidInBlk;
 
   HomeState({
-    this.bidInDollars,
+    this.bidInBlk,
     this.eyesOpenStream,
     this.localVideo,
     this.errorHappened = false,
