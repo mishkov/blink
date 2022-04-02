@@ -256,7 +256,7 @@ class Signaling {
     _blinkTime = DateTime.now();
 
     final Map<String, dynamic> json = {
-      'status': '6',
+      'status': '7',
       'time': _blinkTime!.toIso8601String(),
     };
     _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
