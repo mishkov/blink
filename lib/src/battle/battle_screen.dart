@@ -200,6 +200,7 @@ class _BattleScreenState extends State<BattleScreen>
                 });
               }
 
+              _bidTimeTimer?.cancel();
               if (!blinkLabelController.isAnimating &&
                   !blinkLabelController.isCompleted) {
                 blinkLabelFutureTicker = blinkLabelController.forward();
@@ -225,6 +226,7 @@ class _BattleScreenState extends State<BattleScreen>
               standLabel = 'You did not stand';
             });
           }
+          _bidTimeTimer?.cancel();
 
           if (!blinkLabelController.isAnimating &&
               !blinkLabelController.isCompleted) {
