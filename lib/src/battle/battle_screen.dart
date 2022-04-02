@@ -229,6 +229,8 @@ class _BattleScreenState extends State<BattleScreen>
           if (data is bool) {
             final isUserLoser = !data;
             if (isUserLoser) {
+              _stopwatchTimer?.cancel();
+              _stopwatch.stop();
               if (_bidService.bidTimeInSeconds <=
                   _stopwatch.elapsed.inSeconds) {
                 widget.signaling.sendUserDidStandSingal();
@@ -268,6 +270,8 @@ class _BattleScreenState extends State<BattleScreen>
             }
           }
         }, onError: (error, stackTrace) {
+          _stopwatchTimer?.cancel();
+          _stopwatch.stop();
           if (_bidService.bidTimeInSeconds <= _stopwatch.elapsed.inSeconds) {
             widget.signaling.sendUserDidStandSingal();
             setState(() {
