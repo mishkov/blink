@@ -4,7 +4,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:provider/provider.dart';
 
+import '../bid/bid_service.dart';
 import '../home/signaling.dart';
 import '../lose/lose_screen.dart';
 import '../user/user_service.dart';
@@ -41,6 +43,10 @@ class _BattleScreenState extends State<BattleScreen>
   Timer? _stopwatchTimer;
   String stopwatchLabel = '';
   bool showStopwatch = false;
+  final _bidService = BidService();
+
+  String standLabel = '';
+  Timer? _bidTimeTimer;
 
   bool _isEmulator = false;
 
@@ -49,6 +55,31 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   void initState() {
     super.initState();
+
+    _bidTimeTimer = Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
+      if (widget.signaling.didUserStand ?? true) {
+        widget.signaling.sendUserDidStandSingal();
+        if (!blinkLabelController.isAnimating &&
+            !blinkLabelController.isCompleted) {
+          blinkLabelFutureTicker = blinkLabelController.forward();
+        } else {
+          blinkLabelFutureTicker!.then((_) {
+            setState(() {
+              standLabel = 'You did stand';
+            });
+
+            blinkLabelFutureTicker = blinkLabelController.forward();
+            blinkLabelFutureTicker!.then((_) {
+              return Future.delayed(const Duration(seconds: 1));
+            }).then((_) {
+              setState(() {
+                standLabel = '';
+              });
+            });
+          });
+        }
+      }
+    });
 
     final countDownStartTime = DateTime.now();
 
@@ -117,6 +148,7 @@ class _BattleScreenState extends State<BattleScreen>
   void dispose() {
     eyesOpenStreamSubscriptoin?.cancel();
     blinkLabelController.dispose();
+    _bidTimeTimer?.cancel();
 
     widget.remoteVideo.dispose();
 
@@ -156,20 +188,55 @@ class _BattleScreenState extends State<BattleScreen>
           if (data is bool) {
             final isUserLoser = !data;
             if (isUserLoser) {
+              if (_bidService.bidInBlk <= _stopwatch.elapsed.inSeconds) {
+                widget.signaling.sendUserDidStandSingal();
+                setState(() {
+                  standLabel = 'You did stand';
+                });
+              } else {
+                widget.signaling.sendUserDidNotStandSingal();
+                setState(() {
+                  standLabel = 'You did not stand';
+                });
+              }
+
               if (!blinkLabelController.isAnimating &&
                   !blinkLabelController.isCompleted) {
                 blinkLabelFutureTicker = blinkLabelController.forward();
+                blinkLabelFutureTicker!.then((_) {
+                  return Future.delayed(const Duration(seconds: 1));
+                }).then((_) {
+                  setState(() {
+                    standLabel = '';
+                  });
+                });
               }
-
-              widget.signaling.sendBlinkTime();
             }
           }
         }, onError: (error, stackTrace) {
+          if (_bidService.bidInBlk <= _stopwatch.elapsed.inSeconds) {
+            widget.signaling.sendUserDidStandSingal();
+            setState(() {
+              standLabel = 'You did stand';
+            });
+          } else {
+            widget.signaling.sendUserDidNotStandSingal();
+            setState(() {
+              standLabel = 'You did not stand';
+            });
+          }
+
           if (!blinkLabelController.isAnimating &&
               !blinkLabelController.isCompleted) {
             blinkLabelFutureTicker = blinkLabelController.forward();
+            blinkLabelFutureTicker!.then((_) {
+              return Future.delayed(const Duration(seconds: 1));
+            }).then((_) {
+              setState(() {
+                standLabel = '';
+              });
+            });
           }
-          widget.signaling.sendBlinkTime();
         });
         const updateFrequency = Duration(milliseconds: 100);
         _stopwatch.start();
@@ -246,19 +313,22 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           ),
           Positioned(
-            child: ArcText(
-              radius: 200,
-              text: 'BLINK!!!',
-              textStyle: TextStyle(
-                fontSize: blinkLabelAnimation.value,
-                color: Colors.blue,
-                shadows: const [
-                  Shadow(
-                    color: Colors.black38,
-                  ),
-                ],
+            child: Visibility(
+              visible: standLabel.isNotEmpty,
+              child: ArcText(
+                radius: 200,
+                text: standLabel,
+                textStyle: TextStyle(
+                  fontSize: blinkLabelAnimation.value,
+                  color: Colors.blue,
+                  shadows: const [
+                    Shadow(
+                      color: Colors.black38,
+                    ),
+                  ],
+                ),
+                startAngleAlignment: StartAngleAlignment.center,
               ),
-              startAngleAlignment: StartAngleAlignment.center,
             ),
           ),
           Positioned(
