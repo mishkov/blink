@@ -114,6 +114,27 @@ class _BattleScreenState extends State<BattleScreen>
             });
           });
 
+    widget.signaling.onEnemyDidStand = () {
+      setState(() {
+        standLabel = 'Enemy did stand';
+      });
+
+      if (!blinkLabelController.isAnimating &&
+          !blinkLabelController.isCompleted) {
+        blinkLabelFutureTicker = blinkLabelController.forward();
+      } else {
+        blinkLabelFutureTicker!.then((_) {
+          blinkLabelFutureTicker = blinkLabelController.forward();
+          blinkLabelFutureTicker!.then((_) {
+            return Future.delayed(const Duration(seconds: 1));
+          }).then((_) {
+            setState(() {
+              standLabel = '';
+            });
+          });
+        });
+      }
+    };
     widget.signaling.onEnemyDidNotStand = () {
       setState(() {
         standLabel = 'Enemy did not stand';
