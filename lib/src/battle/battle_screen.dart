@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:blink/src/draw/draw_screen.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
@@ -55,8 +56,6 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   void initState() {
     super.initState();
-
-    
 
     final countDownStartTime = DateTime.now();
 
@@ -170,8 +169,7 @@ class _BattleScreenState extends State<BattleScreen>
       _checkHighestTime();
     };
     widget.signaling.onDraw = () {
-      // TODO: change to draw screen
-      goToLoseScreen();
+      goToDrawScreen();
     };
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -201,6 +199,11 @@ class _BattleScreenState extends State<BattleScreen>
   void goToWinScreen() {
     widget.signaling.hangUp();
     Navigator.popAndPushNamed(context, WinScreen.routeName);
+  }
+
+  void goToDrawScreen() {
+    widget.signaling.hangUp();
+    Navigator.popAndPushNamed(context, DrawScreen.routeName);
   }
 
   Duration timerDuration(int count, DateTime end) {
