@@ -100,6 +100,13 @@ class _BattleScreenState extends State<BattleScreen>
       if (!blinkLabelController.isAnimating &&
           !blinkLabelController.isCompleted) {
         blinkLabelFutureTicker = blinkLabelController.forward();
+        blinkLabelFutureTicker!.then((_) {
+          return Future.delayed(const Duration(seconds: 1));
+        }).then((_) {
+          setState(() {
+            standLabel = '';
+          });
+        });
       } else {
         blinkLabelFutureTicker!.then((_) {
           blinkLabelFutureTicker = blinkLabelController.forward();
@@ -121,6 +128,13 @@ class _BattleScreenState extends State<BattleScreen>
       if (!blinkLabelController.isAnimating &&
           !blinkLabelController.isCompleted) {
         blinkLabelFutureTicker = blinkLabelController.forward();
+        blinkLabelFutureTicker!.then((_) {
+          return Future.delayed(const Duration(seconds: 1));
+        }).then((_) {
+          setState(() {
+            standLabel = '';
+          });
+        });
       } else {
         blinkLabelFutureTicker!.then((_) {
           blinkLabelFutureTicker = blinkLabelController.forward();
@@ -236,6 +250,17 @@ class _BattleScreenState extends State<BattleScreen>
                     standLabel = '';
                   });
                 });
+              } else {
+                blinkLabelFutureTicker!.then((_) {
+                  blinkLabelFutureTicker = blinkLabelController.forward();
+                  blinkLabelFutureTicker!.then((_) {
+                    return Future.delayed(const Duration(seconds: 1));
+                  }).then((_) {
+                    setState(() {
+                      standLabel = '';
+                    });
+                  });
+                });
               }
             }
           }
@@ -263,6 +288,17 @@ class _BattleScreenState extends State<BattleScreen>
                 standLabel = '';
               });
             });
+          } else {
+            blinkLabelFutureTicker!.then((_) {
+              blinkLabelFutureTicker = blinkLabelController.forward();
+              blinkLabelFutureTicker!.then((_) {
+                return Future.delayed(const Duration(seconds: 1));
+              }).then((_) {
+                setState(() {
+                  standLabel = '';
+                });
+              });
+            });
           }
         });
         const updateFrequency = Duration(milliseconds: 100);
@@ -287,6 +323,13 @@ class _BattleScreenState extends State<BattleScreen>
           if (!blinkLabelController.isAnimating &&
               !blinkLabelController.isCompleted) {
             blinkLabelFutureTicker = blinkLabelController.forward();
+            blinkLabelFutureTicker!.then((_) {
+              return Future.delayed(const Duration(seconds: 1));
+            }).then((_) {
+              setState(() {
+                standLabel = '';
+              });
+            });
           } else {
             blinkLabelFutureTicker!.then((_) {
               blinkLabelFutureTicker = blinkLabelController.forward();
