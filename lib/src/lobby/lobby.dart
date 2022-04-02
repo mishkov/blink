@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:blink/src/bid/bid_service.dart';
 import 'package:blink/src/local_camera/local_camera_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import '../battle/battle_screen.dart';
 import '../home/home_model_view.dart';
@@ -23,12 +25,14 @@ class Lobby extends StatefulWidget {
 
 class _LobbyState extends State<Lobby> {
   final _remoteRenderer = RTCVideoRenderer();
-  final _signaling = Signaling();
+  late final Signaling _signaling;
   String _roomId = '';
 
   @override
   void initState() {
     super.initState();
+    _signaling =
+        Signaling(BidService().bidInBlk, BidService().bidTimeInSeconds);
 
     // TODO: Move all of this initializations to `LobbyModelView`
     _signaling.setLocalMediaStream(LocalCameraService().video);
