@@ -157,6 +157,7 @@ class _BattleScreenState extends State<BattleScreen>
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
       _checkHighestTime();
+      UserService().increaseBalance(BidService().bidInBlk);
     };
     widget.signaling.onLose = () {
       blinkLabelFutureTicker!.then((_) {
@@ -167,6 +168,7 @@ class _BattleScreenState extends State<BattleScreen>
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
       _checkHighestTime();
+      UserService().decreaseBalance(BidService().bidInBlk);
     };
     widget.signaling.onDraw = () {
       goToDrawScreen();
