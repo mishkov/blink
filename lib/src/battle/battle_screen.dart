@@ -35,9 +35,9 @@ class BattleScreen extends StatefulWidget {
 
 class _BattleScreenState extends State<BattleScreen>
     with SingleTickerProviderStateMixin {
-  late Animation<double> blinkLabelAnimation;
-  late AnimationController blinkLabelController;
-  TickerFuture? blinkLabelFutureTicker;
+  late Animation<double> standLabelAnimation;
+  late AnimationController standLabelController;
+  TickerFuture? standLabelFutureTicker;
   int? downcount;
   bool hideDowncount = false;
   final _stopwatch = Stopwatch();
@@ -81,10 +81,10 @@ class _BattleScreenState extends State<BattleScreen>
       });
     }
 
-    blinkLabelController = AnimationController(
+    standLabelController = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);
-    blinkLabelAnimation =
-        Tween<double>(begin: 0, end: 70).animate(blinkLabelController)
+    standLabelAnimation =
+        Tween<double>(begin: 0, end: 40).animate(standLabelController)
           ..addListener(() {
             setState(() {
               // The state that has changed here is the animation object’s value.
@@ -96,10 +96,10 @@ class _BattleScreenState extends State<BattleScreen>
         standLabel = 'Enemy did stand';
       });
 
-      if (!blinkLabelController.isAnimating &&
-          !blinkLabelController.isCompleted) {
-        blinkLabelFutureTicker = blinkLabelController.forward();
-        blinkLabelFutureTicker!.then((_) {
+      if (!standLabelController.isAnimating &&
+          !standLabelController.isCompleted) {
+        standLabelFutureTicker = standLabelController.forward();
+        standLabelFutureTicker!.then((_) {
           return Future.delayed(const Duration(seconds: 1));
         }).then((_) {
           setState(() {
@@ -107,9 +107,9 @@ class _BattleScreenState extends State<BattleScreen>
           });
         });
       } else {
-        blinkLabelFutureTicker!.then((_) {
-          blinkLabelFutureTicker = blinkLabelController.forward();
-          blinkLabelFutureTicker!.then((_) {
+        standLabelFutureTicker!.then((_) {
+          standLabelFutureTicker = standLabelController.forward();
+          standLabelFutureTicker!.then((_) {
             return Future.delayed(const Duration(seconds: 1));
           }).then((_) {
             setState(() {
@@ -124,10 +124,10 @@ class _BattleScreenState extends State<BattleScreen>
         standLabel = 'Enemy did not stand';
       });
 
-      if (!blinkLabelController.isAnimating &&
-          !blinkLabelController.isCompleted) {
-        blinkLabelFutureTicker = blinkLabelController.forward();
-        blinkLabelFutureTicker!.then((_) {
+      if (!standLabelController.isAnimating &&
+          !standLabelController.isCompleted) {
+        standLabelFutureTicker = standLabelController.forward();
+        standLabelFutureTicker!.then((_) {
           return Future.delayed(const Duration(seconds: 1));
         }).then((_) {
           setState(() {
@@ -135,9 +135,9 @@ class _BattleScreenState extends State<BattleScreen>
           });
         });
       } else {
-        blinkLabelFutureTicker!.then((_) {
-          blinkLabelFutureTicker = blinkLabelController.forward();
-          blinkLabelFutureTicker!.then((_) {
+        standLabelFutureTicker!.then((_) {
+          standLabelFutureTicker = standLabelController.forward();
+          standLabelFutureTicker!.then((_) {
             return Future.delayed(const Duration(seconds: 1));
           }).then((_) {
             setState(() {
@@ -148,7 +148,7 @@ class _BattleScreenState extends State<BattleScreen>
       }
     };
     widget.signaling.onWin = () {
-      blinkLabelFutureTicker!.then((_) {
+      standLabelFutureTicker!.then((_) {
         return Future.delayed(const Duration(seconds: 1));
       }).then((_) {
         goToWinScreen();
@@ -161,7 +161,7 @@ class _BattleScreenState extends State<BattleScreen>
       UserService().increaseWins();
     };
     widget.signaling.onLose = () {
-      blinkLabelFutureTicker!.then((_) {
+      standLabelFutureTicker!.then((_) {
         return Future.delayed(const Duration(seconds: 1));
       }).then((_) {
         goToLoseScreen();
@@ -187,7 +187,7 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   void dispose() {
     eyesOpenStreamSubscriptoin?.cancel();
-    blinkLabelController.dispose();
+    standLabelController.dispose();
     _bidTimeTimer?.cancel();
 
     widget.remoteVideo.dispose();
@@ -250,10 +250,10 @@ class _BattleScreenState extends State<BattleScreen>
               }
 
               _bidTimeTimer?.cancel();
-              if (!blinkLabelController.isAnimating &&
-                  !blinkLabelController.isCompleted) {
-                blinkLabelFutureTicker = blinkLabelController.forward();
-                blinkLabelFutureTicker!.then((_) {
+              if (!standLabelController.isAnimating &&
+                  !standLabelController.isCompleted) {
+                standLabelFutureTicker = standLabelController.forward();
+                standLabelFutureTicker!.then((_) {
                   return Future.delayed(const Duration(seconds: 1));
                 }).then((_) {
                   setState(() {
@@ -261,9 +261,9 @@ class _BattleScreenState extends State<BattleScreen>
                   });
                 });
               } else {
-                blinkLabelFutureTicker!.then((_) {
-                  blinkLabelFutureTicker = blinkLabelController.forward();
-                  blinkLabelFutureTicker!.then((_) {
+                standLabelFutureTicker!.then((_) {
+                  standLabelFutureTicker = standLabelController.forward();
+                  standLabelFutureTicker!.then((_) {
                     return Future.delayed(const Duration(seconds: 1));
                   }).then((_) {
                     setState(() {
@@ -292,10 +292,10 @@ class _BattleScreenState extends State<BattleScreen>
           }
           _bidTimeTimer?.cancel();
 
-          if (!blinkLabelController.isAnimating &&
-              !blinkLabelController.isCompleted) {
-            blinkLabelFutureTicker = blinkLabelController.forward();
-            blinkLabelFutureTicker!.then((_) {
+          if (!standLabelController.isAnimating &&
+              !standLabelController.isCompleted) {
+            standLabelFutureTicker = standLabelController.forward();
+            standLabelFutureTicker!.then((_) {
               return Future.delayed(const Duration(seconds: 1));
             }).then((_) {
               setState(() {
@@ -303,9 +303,9 @@ class _BattleScreenState extends State<BattleScreen>
               });
             });
           } else {
-            blinkLabelFutureTicker!.then((_) {
-              blinkLabelFutureTicker = blinkLabelController.forward();
-              blinkLabelFutureTicker!.then((_) {
+            standLabelFutureTicker!.then((_) {
+              standLabelFutureTicker = standLabelController.forward();
+              standLabelFutureTicker!.then((_) {
                 return Future.delayed(const Duration(seconds: 1));
               }).then((_) {
                 setState(() {
@@ -336,10 +336,10 @@ class _BattleScreenState extends State<BattleScreen>
             standLabel = 'You did stand';
           });
 
-          if (!blinkLabelController.isAnimating &&
-              !blinkLabelController.isCompleted) {
-            blinkLabelFutureTicker = blinkLabelController.forward();
-            blinkLabelFutureTicker!.then((_) {
+          if (!standLabelController.isAnimating &&
+              !standLabelController.isCompleted) {
+            standLabelFutureTicker = standLabelController.forward();
+            standLabelFutureTicker!.then((_) {
               return Future.delayed(const Duration(seconds: 1));
             }).then((_) {
               setState(() {
@@ -347,9 +347,9 @@ class _BattleScreenState extends State<BattleScreen>
               });
             });
           } else {
-            blinkLabelFutureTicker!.then((_) {
-              blinkLabelFutureTicker = blinkLabelController.forward();
-              blinkLabelFutureTicker!.then((_) {
+            standLabelFutureTicker!.then((_) {
+              standLabelFutureTicker = standLabelController.forward();
+              standLabelFutureTicker!.then((_) {
                 return Future.delayed(const Duration(seconds: 1));
               }).then((_) {
                 setState(() {
@@ -425,21 +425,24 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           ),
           Positioned(
-            child: Visibility(
-              visible: standLabel.isNotEmpty,
-              child: ArcText(
-                radius: 200,
-                text: standLabel,
-                textStyle: TextStyle(
-                  fontSize: blinkLabelAnimation.value,
-                  color: Colors.blue,
-                  shadows: const [
-                    Shadow(
-                      color: Colors.black38,
-                    ),
-                  ],
+            child: Padding(
+              padding: const EdgeInsets.only(top: 400),
+              child: Visibility(
+                visible: standLabel.isNotEmpty,
+                child: ArcText(
+                  radius: 400,
+                  text: standLabel,
+                  textStyle: TextStyle(
+                    fontSize: standLabelAnimation.value,
+                    color: Colors.blue,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black38,
+                      ),
+                    ],
+                  ),
+                  startAngleAlignment: StartAngleAlignment.center,
                 ),
-                startAngleAlignment: StartAngleAlignment.center,
               ),
             ),
           ),
