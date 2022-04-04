@@ -90,8 +90,8 @@ class UserService {
       _user!
         ..balance = updatedUser.balance
         ..highestTime = updatedUser.highestTime
-        ..won = updatedUser.won
-        ..lost = updatedUser.lost;
+        ..wins = updatedUser.wins
+        ..defeats = updatedUser.defeats;
 
       _userStreamController.add(_user!);
     });
@@ -138,6 +138,38 @@ class UserService {
     final decreasedBalance = balance - blks;
 
     await userDoc.update({'balance': decreasedBalance});
+  }
+
+  Future<void> increaseWins() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var currentWins = firebaseUser.wins;
+    currentWins = (currentWins ?? 0) + 1;
+    await userDoc.update({'wins': currentWins});
+  }
+
+  Future<void> increaseDefeats() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var defeats = firebaseUser.defeats;
+    defeats = (defeats ?? 0) + 1;
+    await userDoc.update({'defeats': defeats});
   }
 
   Future<void> logout() async {
