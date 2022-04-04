@@ -108,6 +108,38 @@ class UserService {
     await userDoc.update({'highest_time': highesTimeInMilliseconds});
   }
 
+  Future<void> increaseBalance(int blks) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+    final snapshot = await userDoc.get();
+    final balance = snapshot.data()!['balance'];
+    final increasedBalance = balance + blks;
+
+    await userDoc.update({'balance': increasedBalance});
+  }
+
+  Future<void> decreaseBalance(int blks) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+    final snapshot = await userDoc.get();
+    final balance = snapshot.data()!['balance'];
+    final decreasedBalance = balance - blks;
+
+    await userDoc.update({'balance': decreasedBalance});
+  }
+
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     await _googleSignInConfiguration.signOut();
