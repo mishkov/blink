@@ -30,7 +30,9 @@ class Signaling {
   void Function(DateTime battleStartTime)? onReadyToPlay;
   bool isReadyToPlay = false;
   bool? _didUserStand;
+  bool? _didEnemyStand;
   bool? get didUserStand => _didUserStand;
+  bool? get didEnemyStand => _didEnemyStand;
   DateTime? _blinkTime;
   bool _isBattleEnd = false;
   Function? _onEnemyReadyToReceive;
@@ -168,7 +170,10 @@ class Signaling {
         // enemy did not stand
         case 6:
           if (onEnemyDidNotStand != null) {
-            onEnemyDidNotStand!();
+            if (_didEnemyStand == null) {
+              onEnemyDidNotStand!();
+              _didEnemyStand = false;
+            }
           }
           if (_didUserStand != null) {
             if (_didUserStand!) {
@@ -188,7 +193,10 @@ class Signaling {
         // enemy did stand
         case 7:
           if (onEnemyDidStand != null) {
-            onEnemyDidStand!();
+            if (_didEnemyStand == null) {
+              onEnemyDidStand!();
+              _didEnemyStand = true;
+            }
           }
 
           if (_didUserStand != null) {

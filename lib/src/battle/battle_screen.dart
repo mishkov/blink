@@ -232,7 +232,8 @@ class _BattleScreenState extends State<BattleScreen>
 
           if (data is bool) {
             final isUserLoser = !data;
-            if (isUserLoser) {
+            if (isUserLoser && widget.signaling.didUserStand == null) {
+              eyesOpenStreamSubscriptoin?.cancel();
               _stopwatchTimer?.cancel();
               _stopwatch.stop();
               if (_bidService.bidTimeInSeconds <=
@@ -274,6 +275,8 @@ class _BattleScreenState extends State<BattleScreen>
             }
           }
         }, onError: (error, stackTrace) {
+          if (widget.signaling.didUserStand != null) return;
+          eyesOpenStreamSubscriptoin?.cancel();
           _stopwatchTimer?.cancel();
           _stopwatch.stop();
           if (_bidService.bidTimeInSeconds <= _stopwatch.elapsed.inSeconds) {
