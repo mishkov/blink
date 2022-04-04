@@ -15,8 +15,8 @@
 
   "highestTimeTitle": "The Highest Time",
   "balanceTitle": "Balance",
-  "numberOfEarned": "Won",
-  "numberOfSpent": "Lost",
+  "numberOfEarned": "Wins",
+  "numberOfSpent": "Defeats",
   "settingsTitle": "Settings",
   "logoutButton": "Logout",
 
