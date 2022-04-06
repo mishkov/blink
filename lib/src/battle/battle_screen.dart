@@ -459,19 +459,33 @@ class _BattleScreenState extends State<BattleScreen>
           ),
           Positioned(
             bottom: 100,
-            child: Text(
-              stopwatchLabel,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 70,
-                color: Colors.blue,
-                shadows: [
-                  Shadow(
-                    color: Colors.black38,
-                  ),
-                ],
-              ),
-            ),
+            child: StopWatchLabel(text: stopwatchLabel),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StopWatchLabel extends StatelessWidget {
+  const StopWatchLabel({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 50,
+        color: Colors.blue,
+        shadows: [
+          Shadow(
+            color: Colors.black38,
           ),
         ],
       ),
