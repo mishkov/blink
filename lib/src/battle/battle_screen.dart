@@ -454,21 +454,10 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           ),
           Positioned(
-            child: Visibility(
-              visible: !hideDowncount,
-              child: Text(
-                downcount != 0 ? downcount.toString() : 'NOT BLINK!!!',
-                style: const TextStyle(
-                  fontSize: 70,
-                  color: Colors.blue,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black38,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            child: Countdown(
+                text: downcount != 0
+                    ? (downcount == -1 ? '' : downcount).toString()
+                    : 'NOT BLINK!!!'),
           ),
           Positioned(
             bottom: 100,
@@ -490,6 +479,31 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class Countdown extends StatelessWidget {
+  final String text;
+
+  const Countdown({this.text = '', Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: text.isNotEmpty,
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 70,
+          color: Colors.blue,
+          shadows: [
+            Shadow(
+              color: Colors.black38,
+            ),
+          ],
+        ),
       ),
     );
   }
