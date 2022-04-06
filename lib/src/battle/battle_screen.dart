@@ -42,7 +42,6 @@ class _BattleScreenState extends State<BattleScreen>
   final _stopwatch = Stopwatch();
   Timer? _stopwatchTimer;
   String stopwatchLabel = '';
-  bool showStopwatch = false;
   final _bidService = BidService();
 
   String standLabel = '';
@@ -325,7 +324,6 @@ class _BattleScreenState extends State<BattleScreen>
         const updateFrequency = Duration(milliseconds: 100);
         _stopwatch.start();
         setState(() {
-          showStopwatch = true;
           stopwatchLabel = _stopwatchLabel;
         });
         _stopwatchTimer = Timer.periodic(updateFrequency, _updateStopwatch);
@@ -461,20 +459,17 @@ class _BattleScreenState extends State<BattleScreen>
           ),
           Positioned(
             bottom: 100,
-            child: Visibility(
-              visible: showStopwatch,
-              child: Text(
-                stopwatchLabel,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 70,
-                  color: Colors.blue,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black38,
-                    ),
-                  ],
-                ),
+            child: Text(
+              stopwatchLabel,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 70,
+                color: Colors.blue,
+                shadows: [
+                  Shadow(
+                    color: Colors.black38,
+                  ),
+                ],
               ),
             ),
           ),
