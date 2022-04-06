@@ -72,7 +72,7 @@ class _BattleScreenState extends State<BattleScreen>
       initTimer(downcount!, widget.battleStartTime, countDownStartTime);
     } else {
       // TODO: to be clear add startin of eyesopenstream here
-      downcount = 1;
+      downcount = 0;
       Timer(const Duration(seconds: 1), () {
         setState(() {
           hideDowncount = true;
@@ -217,6 +217,7 @@ class _BattleScreenState extends State<BattleScreen>
   }
 
   Duration timerDuration(int count, DateTime end) {
+    if (count == 0) return const Duration(seconds: 1);
     final remainingTime = end.difference(DateTime.now());
     final durationInMicroseconds = remainingTime.inMicroseconds ~/ count;
     return Duration(microseconds: durationInMicroseconds);
@@ -230,7 +231,7 @@ class _BattleScreenState extends State<BattleScreen>
         }
       });
       count--;
-      if (count > 0) {
+      if (count >= 0) {
         initTimer(count, end, start);
       } else {
         eyesOpenStreamSubscriptoin = widget.eyesOpenStream.listen((data) {
