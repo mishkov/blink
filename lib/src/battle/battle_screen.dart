@@ -432,22 +432,19 @@ class _BattleScreenState extends State<BattleScreen>
           Positioned(
             child: Padding(
               padding: const EdgeInsets.only(top: 400),
-              child: Visibility(
-                visible: standLabel.isNotEmpty,
-                child: ArcText(
-                  radius: 400,
-                  text: standLabel,
-                  textStyle: TextStyle(
-                    fontSize: standLabelAnimation.value,
-                    color: Colors.blue,
-                    shadows: const [
-                      Shadow(
-                        color: Colors.black38,
-                      ),
-                    ],
-                  ),
-                  startAngleAlignment: StartAngleAlignment.center,
+              child: ArcText(
+                radius: 400,
+                text: standLabel,
+                textStyle: TextStyle(
+                  fontSize: standLabelAnimation.value,
+                  color: Colors.blue,
+                  shadows: const [
+                    Shadow(
+                      color: Colors.black38,
+                    ),
+                  ],
                 ),
+                startAngleAlignment: StartAngleAlignment.center,
               ),
             ),
           ),
