@@ -5,7 +5,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:provider/provider.dart';
 
 import '../bid/bid_service.dart';
 import '../home/signaling.dart';
