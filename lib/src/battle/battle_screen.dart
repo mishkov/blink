@@ -495,8 +495,9 @@ class Countdown extends StatelessWidget {
       visible: text.isNotEmpty,
       child: Text(
         text,
+        textAlign: TextAlign.center,
         style: const TextStyle(
-          fontSize: 70,
+          fontSize: 50,
           color: Colors.blue,
           shadows: [
             Shadow(
