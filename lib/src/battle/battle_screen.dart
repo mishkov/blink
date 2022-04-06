@@ -457,7 +457,7 @@ class _BattleScreenState extends State<BattleScreen>
             child: Visibility(
               visible: !hideDowncount,
               child: Text(
-                downcount != 1 ? downcount.toString() : 'NOT BLINK!!!',
+                downcount != 0 ? downcount.toString() : 'NOT BLINK!!!',
                 style: const TextStyle(
                   fontSize: 70,
                   color: Colors.blue,
