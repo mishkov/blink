@@ -500,20 +500,17 @@ class Countdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: text.isNotEmpty,
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 50,
-          color: Colors.blue,
-          shadows: [
-            Shadow(
-              color: Colors.black38,
-            ),
-          ],
-        ),
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 50,
+        color: Colors.blue,
+        shadows: [
+          Shadow(
+            color: Colors.black38,
+          ),
+        ],
       ),
     );
   }
