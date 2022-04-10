@@ -396,12 +396,9 @@ class _BattleScreenState extends State<BattleScreen>
         alignment: AlignmentDirectional.center,
         children: [
           Positioned(
-            child: RotatedBox(
-              quarterTurns: _isEmulator ? 3 : 0,
-              child: RTCVideoView(
-                widget.remoteVideo,
-                objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-              ),
+            child: RTCVideoView(
+              widget.remoteVideo,
+              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
             ),
           ),
           Positioned(
