@@ -356,10 +356,10 @@ class Signaling {
 
     // Listening for remote session description below
     roomRef.snapshots().listen((snapshot) async {
-      // if (snapshot.data() == null) {
-      //   log('Data on updated room is null', stackTrace: StackTrace.current);
-      //   return;
-      // }
+      if (snapshot.data() == null) {
+        log('Data on updated room is null', stackTrace: StackTrace.current);
+        return;
+      }
 
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
