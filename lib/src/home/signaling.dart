@@ -27,6 +27,8 @@ class Signaling {
   void Function()? onDraw;
   void Function()? onEnemyDidStand;
   void Function()? onEnemyDidNotStand;
+  void Function()? onWithProFlashAttacked;
+  void Function()? onWithSimpleFlashAttacked;
   void Function(DateTime battleStartTime)? onReadyToPlay;
   bool isReadyToPlay = false;
   bool? _didUserStand;
@@ -214,6 +216,16 @@ class Signaling {
             _isBattleEnd = true;
           }
           break;
+        case 8:
+          if (onWithProFlashAttacked != null) {
+            onWithProFlashAttacked!();
+          }
+          break;
+        case 9:
+          if (onWithSimpleFlashAttacked != null) {
+            onWithSimpleFlashAttacked!();
+          }
+          break;
       }
     }
   }
@@ -229,6 +241,20 @@ class Signaling {
   //   };
   //   _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
   // }
+
+  Future<void> attackWithProFlash() async {
+    final Map<String, dynamic> json = {
+      'status': '8',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  Future<void> attackWithSimpleFlash() async {
+    final Map<String, dynamic> json = {
+      'status': '9',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
 
   Future<void> sendDrawSignal() async {
     final Map<String, dynamic> json = {
