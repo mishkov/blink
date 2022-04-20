@@ -43,6 +43,8 @@ class _BattleScreenState extends State<BattleScreen>
   Timer? _stopwatchTimer;
   String stopwatchLabel = '';
   final _bidService = BidService();
+  bool showSimpleFlash = false;
+  bool showProFlash = false;
 
   String standLabel = '';
   Timer? _bidTimeTimer;
@@ -89,6 +91,26 @@ class _BattleScreenState extends State<BattleScreen>
             });
           });
 
+    widget.signaling.onWithProFlashAttacked = () {
+      setState(() {
+        showProFlash = true;
+      });
+      Timer(const Duration(milliseconds: 300), () {
+        setState(() {
+          showProFlash = false;
+        });
+      });
+    };
+    widget.signaling.onWithSimpleFlashAttacked = () {
+      setState(() {
+        showSimpleFlash = true;
+      });
+      Timer(const Duration(milliseconds: 300), () {
+        setState(() {
+          showSimpleFlash = false;
+        });
+      });
+    };
     widget.signaling.onEnemyDidStand = () {
       setState(() {
         standLabel = 'Enemy did stand';
@@ -389,6 +411,32 @@ class _BattleScreenState extends State<BattleScreen>
     }
   }
 
+  Future<void> useProFlash(BuildContext context) async {
+    if (await UserService().hasProFlash()) {
+      await UserService().removeProFlash();
+      await widget.signaling.attackWithProFlash();
+    } else {
+      const snackBar = SnackBar(
+        content: Text('No Pro Flash'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> useSimpleFlash(BuildContext context) async {
+    if (await UserService().hasSimpleFlash()) {
+      await UserService().removeSimpleFlash();
+      await widget.signaling.attackWithSimpleFlash();
+    } else {
+      const snackBar = SnackBar(
+        content: Text('No Simple Flash'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -454,6 +502,47 @@ class _BattleScreenState extends State<BattleScreen>
           Positioned(
             bottom: 100,
             child: StopWatchLabel(text: stopwatchLabel),
+          ),
+          Positioned(
+            child: Visibility(
+              visible: showSimpleFlash,
+              child: SizedBox(
+                height: 700,
+                child: Image.asset('assets/images/red_star.png'),
+              ),
+            ),
+          ),
+          Positioned(
+            child: Visibility(
+              visible: showProFlash,
+              child: SizedBox(
+                height: 700,
+                child: Image.asset('assets/images/screamer.jpeg'),
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: "btn1",
+            onPressed: () async {
+              await useProFlash(context);
+            },
+            child: const Text('Pro'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () async {
+                await useSimpleFlash(context);
+              },
+              child: const Text('Simple'),
+            ),
           ),
         ],
       ),
