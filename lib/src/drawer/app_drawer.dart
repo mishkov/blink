@@ -1,4 +1,5 @@
 import 'package:blink/src/drawer/app_drawer_view_model.dart';
+import 'package:blink/src/shop/shop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -85,6 +86,19 @@ class DrawerContent extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20),
             child: Text(state.defeats),
+          ),
+          const Divider(),
+          TextButton(
+            style: TextButton.styleFrom(
+              alignment: Alignment.centerLeft,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, ShopScreen.routeName);
+            },
+            child: const Text(
+              "Shop",
+              style: TextStyle(color: Colors.blue),
+            ),
           ),
           const Divider(),
           TextButton(
