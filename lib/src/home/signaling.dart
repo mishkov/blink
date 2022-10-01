@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -41,6 +42,7 @@ class Signaling {
 
   final int bidInBlk;
   final int bidTimeInSeconds;
+  StreamSubscription? remoteSessionDescriptionSubcription;
 
   RTCDataChannel? _dataChannel;
 
@@ -381,7 +383,8 @@ class Signaling {
     };
 
     // Listening for remote session description below
-    roomRef.snapshots().listen((snapshot) async {
+    remoteSessionDescriptionSubcription =
+        roomRef.snapshots().listen((snapshot) async {
       if (snapshot.data() == null) {
         log('Data on updated room is null', stackTrace: StackTrace.current);
         return;
@@ -525,6 +528,8 @@ class Signaling {
   }
 
   Future<void> hangUp() async {
+    remoteSessionDescriptionSubcription?.cancel();
+
     if (_remoteStream != null) {
       _remoteStream!.getTracks().forEach((track) => track.stop());
     }
