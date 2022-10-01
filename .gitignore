@@ -47,3 +47,5 @@ app.*.map.json
 
 # Auto-generated files
 android/app/build
+
+distribution/upload-keystore.jks
