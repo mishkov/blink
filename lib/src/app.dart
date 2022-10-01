@@ -1,8 +1,10 @@
 import 'package:blink/src/battle_with_bot/battle_with_bot_screen.dart';
 import 'package:blink/src/device_info/device_info_bloc.dart';
+import 'package:blink/src/draw/draw_screen.dart';
 import 'package:blink/src/home/signaling.dart';
 import 'package:blink/src/lobby/lobby.dart';
 import 'package:blink/src/select_mode/select_mode_screen.dart';
+import 'package:blink/src/shop/shop_screen.dart';
 import 'package:blink/src/win/win_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +103,10 @@ class BlinkApp extends StatelessWidget {
                           return const LoseScreen();
                         case WinScreen.routeName:
                           return const WinScreen();
+                        case DrawScreen.routeName:
+                          return const DrawScreen();
+                        case ShopScreen.routeName:
+                          return const ShopScreen();
                         case HomeView.routeName:
                         default:
                           if (FirebaseAuth.instance.currentUser == null) {

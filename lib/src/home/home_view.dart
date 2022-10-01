@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:blink/src/bid/bid_service.dart';
 import 'package:blink/src/drawer/app_drawer.dart';
 import 'package:blink/src/home/home_model_view.dart';
 import 'package:blink/src/lobby/lobby.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:provider/provider.dart';
 
 import '../device_info/device_info_bloc.dart';
 
@@ -40,10 +42,19 @@ class HomeView extends StatelessWidget {
                       top: 20.0,
                       bottom: 8,
                     ),
-                    child: BitInput(
-                      bid: homeState.bidInDollars.toString(),
+                    child: BidInput(
+                      bid: homeState.bidInBlk.toString(),
                       onChanged: (newBid) {
-                        modelView.bidInDollars = int.tryParse(newBid);
+                        modelView.bidInBlk = int.tryParse(newBid);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: BidTimeInput(
+                      bidTime: modelView.bidTimeInSeconds.toString(),
+                      onChanged: (newBidTime) {
+                        modelView.bidTimeInSeconds = int.tryParse(newBidTime);
                       },
                     ),
                   ),
@@ -155,10 +166,11 @@ class EyesStatus extends StatelessWidget {
   }
 }
 
-class BitInput extends StatelessWidget {
+class BidInput extends StatelessWidget {
   final String bid;
   final void Function(String) onChanged;
-  const BitInput({
+
+  const BidInput({
     required this.bid,
     required this.onChanged,
     Key? key,
@@ -172,6 +184,32 @@ class BitInput extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context)!.bidInputTitle,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+}
+
+class BidTimeInput extends StatelessWidget {
+  final String bidTime;
+  final void Function(String) onChanged;
+
+  const BidTimeInput({
+    required this.bidTime,
+    required this.onChanged,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue: bidTime,
+      keyboardType: TextInputType.number,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context)!.bidTimeInputTitle,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),

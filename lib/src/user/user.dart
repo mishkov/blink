@@ -4,8 +4,10 @@ class User {
   String? photoUrl;
   int? highestTime;
   double? balance;
-  double? won;
-  double? lost;
+  int? wins;
+  int? defeats;
+  int? simpleFlashCount;
+  int? proFlashCount;
 
   User({
     this.name,
@@ -13,8 +15,10 @@ class User {
     this.photoUrl,
     this.highestTime,
     this.balance,
-    this.won,
-    this.lost,
+    this.wins,
+    this.defeats,
+    this.simpleFlashCount,
+    this.proFlashCount,
   });
 
   User.empty()
@@ -23,22 +27,28 @@ class User {
         photoUrl = '',
         highestTime = 0,
         balance = 0,
-        won = 0,
-        lost = 0;
+        wins = 0,
+        defeats = 0,
+        simpleFlashCount = 0,
+        proFlashCount = 0;
 
   void setDataFromFireStore(Map<String, dynamic> data) {
-    balance = data['balance'];
-    won = data['won'];
-    lost = data['lost'];
+    balance = data['balance'].toDouble();
+    wins = data['wins'];
+    defeats = data['defeats'];
     highestTime = data['highest_time'];
+    simpleFlashCount = data['simpleFlashCount'];
+    proFlashCount = data['proFlashCount'];
   }
 
   Map<String, dynamic> getDataToFireStore() {
     return {
       'balance': balance,
       'highest_time': highestTime,
-      'lost': lost,
-      'won': won,
+      'defeats': defeats,
+      'wins': wins,
+      'simpleFlashCount': simpleFlashCount,
+      'ProFlashCount': proFlashCount,
     };
   }
 }

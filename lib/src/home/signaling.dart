@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -25,14 +26,27 @@ class Signaling {
   void Function()? onWin;
   void Function()? onLose;
   void Function()? onDraw;
+  void Function()? onEnemyDidStand;
+  void Function()? onEnemyDidNotStand;
+  void Function()? onWithProFlashAttacked;
+  void Function()? onWithSimpleFlashAttacked;
   void Function(DateTime battleStartTime)? onReadyToPlay;
   bool isReadyToPlay = false;
-  bool _didPlayerBlink = false;
+  bool? _didUserStand;
+  bool? _didEnemyStand;
+  bool? get didUserStand => _didUserStand;
+  bool? get didEnemyStand => _didEnemyStand;
   DateTime? _blinkTime;
   bool _isBattleEnd = false;
   Function? _onEnemyReadyToReceive;
 
+  final int bidInBlk;
+  final int bidTimeInSeconds;
+  StreamSubscription? remoteSessionDescriptionSubcription;
+
   RTCDataChannel? _dataChannel;
+
+  Signaling(this.bidInBlk, this.bidTimeInSeconds);
 
   Future<bool> isThereEmptyRoom() async {
     final db = FirebaseFirestore.instance;
@@ -90,52 +104,43 @@ class Signaling {
     if (message.type == MessageType.text) {
       final json = jsonDecode(message.text);
       switch (int.parse(json['status'])) {
-        case 0:
-          final enemyBlinkTime = DateTime.parse(json['time']);
-          if (_didPlayerBlink) {
-            if (_blinkTime!.isAfter(enemyBlinkTime)) {
-              // enemy is loser
-              final Map<String, dynamic> json = {
-                'status': '1',
-              };
-              _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
-              if (onWin != null) {
-                onWin!();
-              }
-              _isBattleEnd = true;
-            } else if (_blinkTime!.isAtSameMomentAs(enemyBlinkTime)) {
-              // Draw!!!!
-              final Map<String, dynamic> json = {
-                'status': '2',
-              };
-              _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
-              if (onDraw != null) {
-                onDraw!();
-              }
-              _isBattleEnd = true;
-            } else {
-              // enemy is winner
-              final Map<String, dynamic> json = {
-                'status': '3',
-              };
-              _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
-              if (onLose != null) {
-                onLose!();
-              }
-              _isBattleEnd = true;
-            }
-          } else {
-            // enemy is loser
-            final Map<String, dynamic> json = {
-              'status': '1',
-            };
-            _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
-            if (onWin != null) {
-              onWin!();
-            }
-            _isBattleEnd = true;
-          }
-          break;
+        // case 0:
+        //   final enemyBlinkTime = DateTime.parse(json['time']);
+        //   if (_didPlayerBlink) {
+        //     if (_blinkTime!.isAfter(enemyBlinkTime)) {
+        //       // enemy is loser
+        //       final Map<String, dynamic> json = {
+        //         'status': '1',
+        //       };
+        //       _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+        //       if (onWin != null) {
+        //         onWin!();
+        //       }
+        //       _isBattleEnd = true;
+        //     } else if (_blinkTime!.isAtSameMomentAs(enemyBlinkTime)) {
+        //       // Draw!!!!
+        //       sendDrawSignal();
+        //       if (onDraw != null) {
+        //         onDraw!();
+        //       }
+        //       _isBattleEnd = true;
+        //     } else {
+        //       // enemy is winner
+        //       sendWinSignal();
+        //       if (onLose != null) {
+        //         onLose!();
+        //       }
+        //       _isBattleEnd = true;
+        //     }
+        //   } else {
+        //     // enemy is loser
+        //     sendLoseSignal();
+        //     if (onWin != null) {
+        //       onWin!();
+        //     }
+        //     _isBattleEnd = true;
+        //   }
+        //   break;
         case 1:
           if (onLose != null) {
             onLose!();
@@ -166,17 +171,135 @@ class Signaling {
             _onEnemyReadyToReceive!();
           }
           break;
+        // enemy did not stand
+        case 6:
+          if (onEnemyDidNotStand != null) {
+            if (_didEnemyStand == null) {
+              onEnemyDidNotStand!();
+              _didEnemyStand = false;
+            }
+          }
+          if (_didUserStand != null) {
+            if (_didUserStand!) {
+              sendLoseSignal();
+              if (onWin != null) {
+                onWin!();
+              }
+            } else {
+              sendLoseSignal();
+              if (onLose != null) {
+                onLose!();
+              }
+            }
+            _isBattleEnd = true;
+          }
+          break;
+        // enemy did stand
+        case 7:
+          if (onEnemyDidStand != null) {
+            if (_didEnemyStand == null) {
+              onEnemyDidStand!();
+              _didEnemyStand = true;
+            }
+          }
+
+          if (_didUserStand != null) {
+            if (_didUserStand!) {
+              sendDrawSignal();
+              if (onDraw != null) {
+                onDraw!();
+              }
+            } else {
+              sendWinSignal();
+              if (onLose != null) {
+                onLose!();
+              }
+            }
+            _isBattleEnd = true;
+          }
+          break;
+        case 8:
+          if (onWithProFlashAttacked != null) {
+            onWithProFlashAttacked!();
+          }
+          break;
+        case 9:
+          if (onWithSimpleFlashAttacked != null) {
+            onWithSimpleFlashAttacked!();
+          }
+          break;
       }
     }
   }
 
-  void sendBlinkTime() {
-    if (_didPlayerBlink) return;
-    _didPlayerBlink = true;
+  // void sendBlinkTime() {
+  //   if (_didPlayerBlink) return;
+  //   _didPlayerBlink = true;
+  //   _blinkTime = DateTime.now();
+
+  //   final Map<String, dynamic> json = {
+  //     'status': '0',
+  //     'time': _blinkTime!.toIso8601String(),
+  //   };
+  //   _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  // }
+
+  Future<void> attackWithProFlash() async {
+    final Map<String, dynamic> json = {
+      'status': '8',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  Future<void> attackWithSimpleFlash() async {
+    final Map<String, dynamic> json = {
+      'status': '9',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  Future<void> sendDrawSignal() async {
+    final Map<String, dynamic> json = {
+      'status': '2',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  Future<void> sendWinSignal() async {
+    final Map<String, dynamic> json = {
+      'status': '3',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  Future<void> sendLoseSignal() async {
+    final Map<String, dynamic> json = {
+      'status': '1',
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  void sendUserDidNotStandSingal() async {
+    // if (_didPlayerBlink) return;
+    _didUserStand = false;
+    // _didPlayerBlink = true;
     _blinkTime = DateTime.now();
 
     final Map<String, dynamic> json = {
-      'status': '0',
+      'status': '6',
+      'time': _blinkTime!.toIso8601String(),
+    };
+    _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
+  }
+
+  void sendUserDidStandSingal() async {
+    //if (_didPlayerBlink) return;
+    _didUserStand = true;
+    //_didPlayerBlink = true;
+    _blinkTime = DateTime.now();
+
+    final Map<String, dynamic> json = {
+      'status': '7',
       'time': _blinkTime!.toIso8601String(),
     };
     _dataChannel?.send(RTCDataChannelMessage(jsonEncode(json)));
@@ -260,11 +383,12 @@ class Signaling {
     };
 
     // Listening for remote session description below
-    roomRef.snapshots().listen((snapshot) async {
-      // if (snapshot.data() == null) {
-      //   log('Data on updated room is null', stackTrace: StackTrace.current);
-      //   return;
-      // }
+    remoteSessionDescriptionSubcription =
+        roomRef.snapshots().listen((snapshot) async {
+      if (snapshot.data() == null) {
+        log('Data on updated room is null', stackTrace: StackTrace.current);
+        return;
+      }
 
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
@@ -404,6 +528,8 @@ class Signaling {
   }
 
   Future<void> hangUp() async {
+    remoteSessionDescriptionSubcription?.cancel();
+
     if (_remoteStream != null) {
       _remoteStream!.getTracks().forEach((track) => track.stop());
     }

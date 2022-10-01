@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:blink/src/draw/draw_screen.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
+import '../bid/bid_service.dart';
 import '../home/signaling.dart';
 import '../lose/lose_screen.dart';
 import '../user/user_service.dart';
@@ -32,15 +34,20 @@ class BattleScreen extends StatefulWidget {
 
 class _BattleScreenState extends State<BattleScreen>
     with SingleTickerProviderStateMixin {
-  late Animation<double> blinkLabelAnimation;
-  late AnimationController blinkLabelController;
-  TickerFuture? blinkLabelFutureTicker;
+  late Animation<double> standLabelAnimation;
+  late AnimationController standLabelController;
+  TickerFuture? standLabelFutureTicker;
   int? downcount;
   bool hideDowncount = false;
   final _stopwatch = Stopwatch();
   Timer? _stopwatchTimer;
   String stopwatchLabel = '';
-  bool showStopwatch = false;
+  final _bidService = BidService();
+  bool showSimpleFlash = false;
+  bool showProFlash = false;
+
+  String standLabel = '';
+  Timer? _bidTimeTimer;
 
   bool _isEmulator = false;
 
@@ -66,7 +73,7 @@ class _BattleScreenState extends State<BattleScreen>
       initTimer(downcount!, widget.battleStartTime, countDownStartTime);
     } else {
       // TODO: to be clear add startin of eyesopenstream here
-      downcount = 1;
+      downcount = 0;
       Timer(const Duration(seconds: 1), () {
         setState(() {
           hideDowncount = true;
@@ -74,35 +81,126 @@ class _BattleScreenState extends State<BattleScreen>
       });
     }
 
-    blinkLabelController = AnimationController(
+    standLabelController = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);
-    blinkLabelAnimation =
-        Tween<double>(begin: 0, end: 70).animate(blinkLabelController)
+    standLabelAnimation =
+        Tween<double>(begin: 0, end: 40).animate(standLabelController)
           ..addListener(() {
             setState(() {
               // The state that has changed here is the animation object’s value.
             });
           });
 
+    widget.signaling.onWithProFlashAttacked = () {
+      setState(() {
+        showProFlash = true;
+      });
+      Timer(const Duration(milliseconds: 300), () {
+        setState(() {
+          showProFlash = false;
+        });
+      });
+    };
+    widget.signaling.onWithSimpleFlashAttacked = () {
+      setState(() {
+        showSimpleFlash = true;
+      });
+      Timer(const Duration(milliseconds: 300), () {
+        setState(() {
+          showSimpleFlash = false;
+        });
+      });
+    };
+    widget.signaling.onEnemyDidStand = () {
+      setState(() {
+        standLabel = 'Enemy did stand';
+      });
+
+      if (!standLabelController.isAnimating &&
+          !standLabelController.isCompleted) {
+        standLabelFutureTicker = standLabelController.forward();
+        standLabelFutureTicker!.then((_) {
+          return Future.delayed(const Duration(seconds: 2));
+        }).then((_) {
+          setState(() {
+            standLabel = '';
+          });
+        });
+      } else {
+        standLabelFutureTicker!.then((_) {
+          standLabelFutureTicker = standLabelController.forward();
+          standLabelFutureTicker!.then((_) {
+            return Future.delayed(const Duration(seconds: 2));
+          }).then((_) {
+            setState(() {
+              standLabel = '';
+            });
+          });
+        });
+      }
+    };
+    widget.signaling.onEnemyDidNotStand = () {
+      setState(() {
+        standLabel = 'Enemy did not stand';
+      });
+
+      if (!standLabelController.isAnimating &&
+          !standLabelController.isCompleted) {
+        standLabelFutureTicker = standLabelController.forward();
+        standLabelFutureTicker!.then((_) {
+          return Future.delayed(const Duration(seconds: 2));
+        }).then((_) {
+          setState(() {
+            standLabel = '';
+          });
+        });
+      } else {
+        standLabelFutureTicker!.then((_) {
+          standLabelFutureTicker = standLabelController.forward();
+          standLabelFutureTicker!.then((_) {
+            return Future.delayed(const Duration(seconds: 2));
+          }).then((_) {
+            setState(() {
+              standLabel = '';
+            });
+          });
+        });
+      }
+    };
     widget.signaling.onWin = () {
-      goToWinScreen();
+      standLabelFutureTicker!.then((_) {
+        return Future.delayed(const Duration(seconds: 3));
+      }).then((_) {
+        goToWinScreen();
+      });
+
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
       _checkHighestTime();
+      UserService().increaseBalance(BidService().bidInBlk);
+      UserService().increaseWins();
     };
     widget.signaling.onLose = () {
-      blinkLabelFutureTicker!.then((_) {
-        return Future.delayed(const Duration(seconds: 1));
+      standLabelFutureTicker!.then((_) {
+        return Future.delayed(const Duration(seconds: 3));
       }).then((_) {
         goToLoseScreen();
       });
       _stopwatchTimer?.cancel();
       _stopwatch.stop();
       _checkHighestTime();
+      UserService().decreaseBalance(BidService().bidInBlk);
+      UserService().increaseDefeats();
     };
     widget.signaling.onDraw = () {
-      // TODO: change to draw screen
-      goToLoseScreen();
+      standLabelFutureTicker!.then((_) {
+        return Future.delayed(const Duration(seconds: 3));
+      }).then((_) {
+        goToDrawScreen();
+      });
+      _stopwatchTimer?.cancel();
+      _stopwatch.stop();
+      _checkHighestTime();
     };
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -116,7 +214,8 @@ class _BattleScreenState extends State<BattleScreen>
   @override
   void dispose() {
     eyesOpenStreamSubscriptoin?.cancel();
-    blinkLabelController.dispose();
+    standLabelController.dispose();
+    _bidTimeTimer?.cancel();
 
     widget.remoteVideo.dispose();
 
@@ -133,7 +232,13 @@ class _BattleScreenState extends State<BattleScreen>
     Navigator.popAndPushNamed(context, WinScreen.routeName);
   }
 
+  void goToDrawScreen() {
+    widget.signaling.hangUp();
+    Navigator.popAndPushNamed(context, DrawScreen.routeName);
+  }
+
   Duration timerDuration(int count, DateTime end) {
+    if (count == 0) return const Duration(seconds: 1);
     final remainingTime = end.difference(DateTime.now());
     final durationInMicroseconds = remainingTime.inMicroseconds ~/ count;
     return Duration(microseconds: durationInMicroseconds);
@@ -147,7 +252,7 @@ class _BattleScreenState extends State<BattleScreen>
         }
       });
       count--;
-      if (count > 0) {
+      if (count >= 0) {
         initTimer(count, end, start);
       } else {
         eyesOpenStreamSubscriptoin = widget.eyesOpenStream.listen((data) {
@@ -155,32 +260,133 @@ class _BattleScreenState extends State<BattleScreen>
 
           if (data is bool) {
             final isUserLoser = !data;
-            if (isUserLoser) {
-              if (!blinkLabelController.isAnimating &&
-                  !blinkLabelController.isCompleted) {
-                blinkLabelFutureTicker = blinkLabelController.forward();
+            if (isUserLoser && widget.signaling.didUserStand == null) {
+              eyesOpenStreamSubscriptoin?.cancel();
+              _stopwatchTimer?.cancel();
+              _stopwatch.stop();
+              if (_bidService.bidTimeInSeconds <=
+                  _stopwatch.elapsed.inSeconds) {
+                widget.signaling.sendUserDidStandSingal();
+                setState(() {
+                  standLabel = 'You did stand';
+                });
+              } else {
+                widget.signaling.sendUserDidNotStandSingal();
+                setState(() {
+                  standLabel = 'You did not stand';
+                });
               }
 
-              widget.signaling.sendBlinkTime();
+              _bidTimeTimer?.cancel();
+              if (!standLabelController.isAnimating &&
+                  !standLabelController.isCompleted) {
+                standLabelFutureTicker = standLabelController.forward();
+                standLabelFutureTicker!.then((_) {
+                  return Future.delayed(const Duration(seconds: 2));
+                }).then((_) {
+                  setState(() {
+                    standLabel = '';
+                  });
+                });
+              } else {
+                standLabelFutureTicker!.then((_) {
+                  standLabelFutureTicker = standLabelController.forward();
+                  standLabelFutureTicker!.then((_) {
+                    return Future.delayed(const Duration(seconds: 2));
+                  }).then((_) {
+                    setState(() {
+                      standLabel = '';
+                    });
+                  });
+                });
+              }
             }
           }
         }, onError: (error, stackTrace) {
-          if (!blinkLabelController.isAnimating &&
-              !blinkLabelController.isCompleted) {
-            blinkLabelFutureTicker = blinkLabelController.forward();
+          if (widget.signaling.didUserStand != null) return;
+          eyesOpenStreamSubscriptoin?.cancel();
+          _stopwatchTimer?.cancel();
+          _stopwatch.stop();
+          if (_bidService.bidTimeInSeconds <= _stopwatch.elapsed.inSeconds) {
+            widget.signaling.sendUserDidStandSingal();
+            setState(() {
+              standLabel = 'You did stand';
+            });
+          } else {
+            widget.signaling.sendUserDidNotStandSingal();
+            setState(() {
+              standLabel = 'You did not stand';
+            });
           }
-          widget.signaling.sendBlinkTime();
+          _bidTimeTimer?.cancel();
+
+          if (!standLabelController.isAnimating &&
+              !standLabelController.isCompleted) {
+            standLabelFutureTicker = standLabelController.forward();
+            standLabelFutureTicker!.then((_) {
+              return Future.delayed(const Duration(seconds: 2));
+            }).then((_) {
+              setState(() {
+                standLabel = '';
+              });
+            });
+          } else {
+            standLabelFutureTicker!.then((_) {
+              standLabelFutureTicker = standLabelController.forward();
+              standLabelFutureTicker!.then((_) {
+                return Future.delayed(const Duration(seconds: 2));
+              }).then((_) {
+                setState(() {
+                  standLabel = '';
+                });
+              });
+            });
+          }
         });
         const updateFrequency = Duration(milliseconds: 100);
         _stopwatch.start();
         setState(() {
-          showStopwatch = true;
           stopwatchLabel = _stopwatchLabel;
         });
         _stopwatchTimer = Timer.periodic(updateFrequency, _updateStopwatch);
 
         setState(() {
           hideDowncount = true;
+        });
+
+        _bidTimeTimer =
+            Timer(Duration(seconds: _bidService.bidTimeInSeconds), () {
+          _stopwatchTimer?.cancel();
+          _stopwatch.stop();
+          eyesOpenStreamSubscriptoin?.cancel();
+          setState(() {
+            standLabel = 'You did stand';
+          });
+
+          if (!standLabelController.isAnimating &&
+              !standLabelController.isCompleted) {
+            standLabelFutureTicker = standLabelController.forward();
+            standLabelFutureTicker!.then((_) {
+              return Future.delayed(const Duration(seconds: 2));
+            }).then((_) {
+              setState(() {
+                standLabel = '';
+              });
+            });
+          } else {
+            standLabelFutureTicker!.then((_) {
+              standLabelFutureTicker = standLabelController.forward();
+              standLabelFutureTicker!.then((_) {
+                return Future.delayed(const Duration(seconds: 2));
+              }).then((_) {
+                setState(() {
+                  standLabel = '';
+                });
+              });
+            });
+          }
+
+          widget.signaling.sendUserDidStandSingal();
         });
       }
     });
@@ -205,6 +411,32 @@ class _BattleScreenState extends State<BattleScreen>
     }
   }
 
+  Future<void> useProFlash(BuildContext context) async {
+    if (await UserService().hasProFlash()) {
+      await UserService().removeProFlash();
+      await widget.signaling.attackWithProFlash();
+    } else {
+      const snackBar = SnackBar(
+        content: Text('No Pro Flash'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> useSimpleFlash(BuildContext context) async {
+    if (await UserService().hasSimpleFlash()) {
+      await UserService().removeSimpleFlash();
+      await widget.signaling.attackWithSimpleFlash();
+    } else {
+      const snackBar = SnackBar(
+        content: Text('No Simple Flash'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,12 +444,9 @@ class _BattleScreenState extends State<BattleScreen>
         alignment: AlignmentDirectional.center,
         children: [
           Positioned(
-            child: RotatedBox(
-              quarterTurns: _isEmulator ? 3 : 0,
-              child: RTCVideoView(
-                widget.remoteVideo,
-                objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-              ),
+            child: RTCVideoView(
+              widget.remoteVideo,
+              objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
             ),
           ),
           Positioned(
@@ -246,56 +475,123 @@ class _BattleScreenState extends State<BattleScreen>
             ),
           ),
           Positioned(
-            child: ArcText(
-              radius: 200,
-              text: 'BLINK!!!',
-              textStyle: TextStyle(
-                fontSize: blinkLabelAnimation.value,
-                color: Colors.blue,
-                shadows: const [
-                  Shadow(
-                    color: Colors.black38,
-                  ),
-                ],
-              ),
-              startAngleAlignment: StartAngleAlignment.center,
-            ),
-          ),
-          Positioned(
-            child: Visibility(
-              visible: !hideDowncount,
-              child: Text(
-                downcount != 1 ? downcount.toString() : 'NOT BLINK!!!',
-                style: const TextStyle(
-                  fontSize: 70,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 400),
+              child: ArcText(
+                radius: 400,
+                text: standLabel,
+                textStyle: TextStyle(
+                  fontSize: standLabelAnimation.value,
                   color: Colors.blue,
-                  shadows: [
+                  shadows: const [
                     Shadow(
                       color: Colors.black38,
                     ),
                   ],
                 ),
+                startAngleAlignment: StartAngleAlignment.center,
               ),
             ),
+          ),
+          Positioned(
+            child: Countdown(
+                text: downcount != 0
+                    ? (downcount == -1 ? '' : downcount).toString()
+                    : 'NOT BLINK!!!'),
           ),
           Positioned(
             bottom: 100,
+            child: StopWatchLabel(text: stopwatchLabel),
+          ),
+          Positioned(
             child: Visibility(
-              visible: showStopwatch,
-              child: Text(
-                stopwatchLabel,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 70,
-                  color: Colors.blue,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black38,
-                    ),
-                  ],
-                ),
+              visible: showSimpleFlash,
+              child: SizedBox(
+                height: 700,
+                child: Image.asset('assets/images/red_star.png'),
               ),
             ),
+          ),
+          Positioned(
+            child: Visibility(
+              visible: showProFlash,
+              child: SizedBox(
+                height: 700,
+                child: Image.asset('assets/images/screamer.jpeg'),
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: "btn1",
+            onPressed: () async {
+              await useProFlash(context);
+            },
+            child: const Text('Pro'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () async {
+                await useSimpleFlash(context);
+              },
+              child: const Text('Simple'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StopWatchLabel extends StatelessWidget {
+  const StopWatchLabel({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 50,
+        color: Colors.blue,
+        shadows: [
+          Shadow(
+            color: Colors.black38,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Countdown extends StatelessWidget {
+  final String text;
+
+  const Countdown({this.text = '', Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 50,
+        color: Colors.blue,
+        shadows: [
+          Shadow(
+            color: Colors.black38,
           ),
         ],
       ),

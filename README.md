@@ -1,30 +1,13 @@
-# blink
+# Blink
 
-A new Flutter project.
+The staring game
 
-## Getting Started
+# Logs Filter
 
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
+When you running app you will see to many logs from facedetector. To remote them use filter below:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+!V/faceDetectorV2Jni(*): detectFacesImageByteArray.*()
+```
 
-## Assets
-
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
-
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
-
-## Localization
-
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
-
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
+I think using filter is not good solution. Maybe you need to remove unnecessary logs at all.

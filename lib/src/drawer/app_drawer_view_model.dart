@@ -14,8 +14,8 @@ class AppDrawerViewModel extends Cubit<AppDrawerState> {
           email: UserService().user?.email ?? '',
           highestTime: _timeFromMilliseconds(UserService().user?.highestTime),
           balance: (UserService().user?.balance ?? '').toString(),
-          won: (UserService().user?.won ?? '').toString(),
-          lost: (UserService().user?.lost ?? '').toString(),
+          wins: (UserService().user?.wins ?? '').toString(),
+          defeats: (UserService().user?.defeats ?? '').toString(),
         )) {
     _registerListener();
   }
@@ -28,8 +28,8 @@ class AppDrawerViewModel extends Cubit<AppDrawerState> {
         email: user.email ?? '',
         highestTime: _timeFromMilliseconds(user.highestTime),
         balance: (user.balance ?? '').toString(),
-        won: (user.won ?? '').toString(),
-        lost: (user.lost ?? '').toString(),
+        wins: (user.wins ?? '').toString(),
+        defeats: (user.defeats ?? '').toString(),
       );
       emit(state);
     });
@@ -57,8 +57,8 @@ class AppDrawerState {
   final String email;
   final String highestTime;
   final String balance;
-  final String won;
-  final String lost;
+  final String wins;
+  final String defeats;
 
   AppDrawerState({
     required this.name,
@@ -66,7 +66,7 @@ class AppDrawerState {
     required this.email,
     required this.highestTime,
     required this.balance,
-    required this.won,
-    required this.lost,
+    required this.wins,
+    required this.defeats,
   });
 }

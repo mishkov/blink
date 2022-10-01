@@ -15,8 +15,8 @@
 
   "highestTimeTitle": "The Highest Time",
   "balanceTitle": "Balance",
-  "numberOfEarned": "Won",
-  "numberOfSpent": "Lost",
+  "numberOfEarned": "Wins",
+  "numberOfSpent": "Defeats",
   "settingsTitle": "Settings",
   "logoutButton": "Logout",
 
@@ -24,7 +24,8 @@
   "eyesIsOpenStatus": "Eyes is open",
   "eyesIsClosedStatus": "Eyes is close",
   "requestToPutFaceToCamera": "Please put your face to camera",
-  "bidInputTitle": "Bid (Not working now)",
+  "bidInputTitle": "Bid in BLK",
+  "bidTimeInputTitle": "Bid Time in seconds",
   "cameraIsLoadingNotification": "Please wait for camera...",
 
   "realManMode": "Real Man",

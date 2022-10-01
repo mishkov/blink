@@ -90,8 +90,8 @@ class UserService {
       _user!
         ..balance = updatedUser.balance
         ..highestTime = updatedUser.highestTime
-        ..won = updatedUser.won
-        ..lost = updatedUser.lost;
+        ..wins = updatedUser.wins
+        ..defeats = updatedUser.defeats;
 
       _userStreamController.add(_user!);
     });
@@ -106,6 +106,190 @@ class UserService {
     final userDoc =
         FirebaseFirestore.instance.collection('users').doc(user.uid);
     await userDoc.update({'highest_time': highesTimeInMilliseconds});
+  }
+
+  Future<void> increaseBalance(int blks) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+    final snapshot = await userDoc.get();
+    final balance = snapshot.data()!['balance'];
+    final increasedBalance = balance + blks;
+
+    await userDoc.update({'balance': increasedBalance});
+  }
+
+  Future<void> decreaseBalance(int blks) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+    final snapshot = await userDoc.get();
+    final balance = snapshot.data()!['balance'];
+    final decreasedBalance = balance - blks;
+
+    await userDoc.update({'balance': decreasedBalance});
+  }
+
+  Future<void> increaseWins() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var currentWins = firebaseUser.wins;
+    currentWins = (currentWins ?? 0) + 1;
+    await userDoc.update({'wins': currentWins});
+  }
+
+  Future<void> increaseDefeats() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var defeats = firebaseUser.defeats;
+    defeats = (defeats ?? 0) + 1;
+    await userDoc.update({'defeats': defeats});
+  }
+
+  Future<bool> canBuySimpleFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    return (firebaseUser.balance ?? 0) >= 10;
+  }
+
+  Future<void> addSimpleFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var simpleFlashCount = firebaseUser.simpleFlashCount;
+    simpleFlashCount = (simpleFlashCount ?? 0) + 1;
+    await userDoc.update({'simpleFlashCount': simpleFlashCount});
+  }
+
+  Future<void> removeSimpleFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var simpleFlashCount = firebaseUser.simpleFlashCount;
+    simpleFlashCount = (simpleFlashCount ?? 1) - 1;
+    await userDoc.update({'simpleFlashCount': simpleFlashCount});
+  }
+
+  Future<bool> canBuyProFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    return (firebaseUser.balance ?? 0) >= 100;
+  }
+
+  Future<void> addProFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var proFlashCount = firebaseUser.proFlashCount;
+    proFlashCount = (proFlashCount ?? 0) + 1;
+    await userDoc.update({'proFlashCount': proFlashCount});
+  }
+
+  Future<void> removeProFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    var proFlashCount = firebaseUser.simpleFlashCount;
+    proFlashCount = (proFlashCount ?? 1) - 1;
+    await userDoc.update({'proFlashCount': proFlashCount});
+  }
+
+  Future<bool> hasProFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    return (firebaseUser.proFlashCount ?? 0) >= 1;
+  }
+
+  Future<bool> hasSimpleFlash() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw NoSignedInUserExceptino('No signed in user');
+    }
+
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final userSnapshot = await userDoc.get();
+    final firebaseUser = firebase_user.User.empty();
+    firebaseUser.setDataFromFireStore(userSnapshot.data()!);
+    return (firebaseUser.simpleFlashCount?? 0) >= 1;
   }
 
   Future<void> logout() async {
